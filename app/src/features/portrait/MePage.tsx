@@ -1,4 +1,4 @@
-import { PenLine, RotateCcw } from 'lucide-react'
+import { EyeOff, PenLine, RotateCcw } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { useData } from '@/data/DataProvider'
@@ -8,11 +8,11 @@ import { PageHeader } from '@/shared/ui/PageHeader'
 import { Tag } from '@/shared/ui/Tag'
 
 /**
- * P10 我的：Portrait 完成/公开状态、编辑入口、关系状态与动态位置预留。
- * 演示身份初始未创建 Portrait（DEC-002：先浏览，首次互动前再创建）。
+ * P10 我的：Portrait 完成/公开状态、编辑入口、公开/撤回、关系状态与动态位置预留。
+ * 撤回公开（DEC-003）：退出公开列表与星云、暂停主动打招呼；已有邀请/会话/报名保留。
  */
 export default function MePage() {
-  const { myPortrait, resetDemo } = useData()
+  const { myPortrait, withdrawPortrait, resetDemo } = useData()
 
   return (
     <div>
@@ -25,6 +25,7 @@ export default function MePage() {
               <h2 className="text-lg font-bold">{myPortrait.nickname}</h2>
               <Tag tone={myPortrait.isPublic ? 'mint' : 'neutral'}>{myPortrait.isPublic ? '已公开' : '未公开'}</Tag>
             </div>
+            {myPortrait.bio ? <p className="mt-2 text-sm leading-relaxed text-ink-sub">{myPortrait.bio}</p> : null}
             <div className="mt-3 flex flex-wrap gap-1.5">
               {myPortrait.interestTags.map((t) => (
                 <Tag key={t} tone="mint">{t}</Tag>
@@ -33,6 +34,11 @@ export default function MePage() {
                 <Tag key={s} tone="pink">{s}</Tag>
               ))}
             </div>
+            <p className="mt-3 text-[11px] leading-relaxed text-ink-sub">
+              {myPortrait.isPublic
+                ? '当前状态：出现在公开找人列表与星云中，可以主动打招呼。'
+                : '当前状态：不出现在公开列表与星云，不能主动打招呼；仍可以凭基础 Portrait 向组织者展示并报名（DEC-002.4）。'}
+            </p>
           </div>
         ) : (
           <div className="text-center">
@@ -60,7 +66,21 @@ export default function MePage() {
           <Link to="/me/portrait/preview">
             <Button variant="outline">预览他人可见效果</Button>
           </Link>
+          {myPortrait.isPublic ? (
+            <Button variant="outline" onClick={() => withdrawPortrait()}>
+              <EyeOff size={14} /> 撤回公开
+            </Button>
+          ) : null}
         </div>
+      ) : null}
+
+      {myPortrait?.isPublic ? (
+        <Card className="mb-4 border border-dashed border-ink-sub/30 bg-card/60">
+          <p className="text-xs leading-relaxed text-ink-sub">
+            撤回公开后：你将退出公开找人列表与星云，并暂停主动打招呼；
+            已发出的邀请、已有会话和活动报名继续有效，已有互动的对方仍可从记录查看你的基础 Portrait（DEC-003.2/3/4）。
+          </p>
+        </Card>
       ) : null}
 
       <Card className="mb-4 border border-dashed border-ink-sub/30 bg-card/60">
@@ -75,10 +95,16 @@ export default function MePage() {
         <p className="mt-1 text-xs leading-relaxed text-ink-sub">
           当前为合成演示数据，保存在本浏览器的 localStorage 中，刷新后保留；不会发送到任何服务器，也不是跨设备联机。
         </p>
-        <Button variant="ghost" className="mt-2 px-0 text-xs" onClick={() => resetDemo()}>
+        <Button variant="ghost" className="mt-2 px-0 text-xs" onClick={() => resetDemoSafe()}>
           <RotateCcw size={13} /> 重置为初始合成样例
         </Button>
       </Card>
     </div>
   )
+
+  function resetDemoSafe() {
+    if (window.confirm('将清除本浏览器中的演示修改并恢复初始合成样例，确定重置？')) {
+      resetDemo()
+    }
+  }
 }

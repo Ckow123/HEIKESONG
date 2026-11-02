@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { createBrowserRouter, Navigate } from 'react-router-dom'
+import { createBrowserRouter, createHashRouter, Navigate } from 'react-router-dom'
 
 import { AppShell } from './AppShell'
 
@@ -9,6 +9,9 @@ import { AppShell } from './AppShell'
  * P04 /discover/activities  P05 /activities/:activityId  P06 /nebula
  * P07 /square          P08 /messages            P09 /messages/:conversationId
  * P10 /me              P11 /me/portrait/edit    P12 /me/portrait/preview
+ *
+ * HTTP 环境（开发、preview、线上部署）使用 BrowserRouter，地址保持 /discover 这类干净路径；
+ * 用 file:// 双击打开单文件构建产物时自动切换 HashRouter（file 协议无法做服务端回退）。
  */
 const DiscoveryPage = lazy(() => import('@/features/discovery/DiscoveryPage'))
 const PeoplePage = lazy(() => import('@/features/discovery/PeoplePage'))
@@ -25,7 +28,7 @@ const PortraitPreviewPage = lazy(() => import('@/features/portrait/PortraitPrevi
 
 const fallback = <div className="py-16 text-center text-sm text-ink-sub">加载中…</div>
 
-export const router = createBrowserRouter([
+const routes = [
   {
     path: '/',
     element: <AppShell />,
@@ -46,4 +49,10 @@ export const router = createBrowserRouter([
       { path: '*', element: <Navigate to="/discover" replace /> },
     ],
   },
-])
+]
+
+/** HTTP 下用 BrowserRouter；file:// 直接打开单文件产物时用 HashRouter */
+export const router =
+  window.location.protocol === 'file:'
+    ? createHashRouter(routes)
+    : createBrowserRouter(routes)

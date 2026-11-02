@@ -20,6 +20,7 @@ const shots = [
   { path: '/messages/conv-1', name: 'P09-conversation' },
   { path: '/me', name: 'P10-me' },
   { path: '/me/portrait/edit', name: 'P11-portrait-edit' },
+  { path: '/me/portrait/preview', name: 'P12-portrait-preview' },
 ]
 const viewports = [
   { name: 'mobile-390', width: 390, height: 844 },

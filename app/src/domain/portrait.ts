@@ -39,6 +39,17 @@ export interface PublicPortraitView {
   relationshipStatus?: RelationshipStatus
 }
 
+/** 创建/编辑 Portrait 的输入（必填校验在表单层完成，见 DEC-002.2）。 */
+export interface PortraitDraft {
+  nickname: string
+  interestTags: string[]
+  socialIntents: string[]
+  bio?: string
+  mbti?: string
+  zodiac?: string
+  relationshipStatus?: RelationshipStatus
+}
+
 /** 定向授权（DEC-003）：撤回公开后，已有互动对方仍可从记录查看基础 Portrait。 */
 export interface InteractionAccess {
   id: string

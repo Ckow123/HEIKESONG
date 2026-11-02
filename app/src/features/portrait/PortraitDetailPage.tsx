@@ -14,7 +14,7 @@ import { Tag } from '@/shared/ui/Tag'
  */
 export default function PortraitDetailPage() {
   const { portraitId } = useParams<{ portraitId: string }>()
-  const { state, getPortraitById, canViewBasicPortrait } = useData()
+  const { state, getPortraitById, canViewBasicPortrait, canGreet } = useData()
 
   const portrait = portraitId ? getPortraitById(portraitId) : undefined
 
@@ -93,8 +93,11 @@ export default function PortraitDetailPage() {
           </Card>
           <Card className="border border-dashed border-ink-sub/30 bg-card/60">
             <p className="text-xs leading-relaxed text-ink-sub">
-              打招呼与邀请功能将在 T5 接入：主动打招呼需要先公开自己的 Portrait（DEC-002.5），
-              对方明确接受邀请后才能开启自由聊天（DEC-003.5）。本阶段不发送真实邀请。
+              {canGreet(viewerId)
+                ? '你的 Portrait 已公开，具备主动打招呼门槛（DEC-002.5）。'
+                : '你尚未公开 Portrait，暂不能主动打招呼（DEC-002.5）；未公开时仍可凭基础 Portrait 报名活动。'}
+              打招呼发送规则（招呼内容、重复发送等）尚未确认，本阶段不发送真实邀请；
+              对方明确接受邀请后才能开启自由聊天（DEC-003.5）。
             </p>
           </Card>
         </div>

@@ -1,7 +1,8 @@
 import { CalendarDays, MapPin, Users } from 'lucide-react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 import { useData } from '@/data/DataProvider'
+import { Button } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
 import { PageHeader } from '@/shared/ui/PageHeader'
 import { Tag } from '@/shared/ui/Tag'
@@ -70,6 +71,11 @@ export default function ActivityDetailPage() {
               你还没有创建 Portrait。报名前需要先在「我的」中完成基础 Portrait（昵称 + 至少 1 个兴趣标签 + 至少 1 项社交意图）。
             </p>
           )}
+          {!enrollGatePassed ? (
+            <Link to="/me/portrait/edit" className="mt-2 inline-block">
+              <Button variant="outline">去创建 / 补全基础 Portrait</Button>
+            </Link>
+          ) : null}
           <p className="mt-2 text-xs leading-relaxed text-ink-sub">
             报名提交、组织者确认、名额占用与取消规则尚未确定，本阶段不提供报名按钮，不会伪造「报名成功」。
           </p>

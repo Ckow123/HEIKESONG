@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 
-import type { Invitation, NebulaProjection, Portrait, PublicPortraitView } from '@/domain'
+import type { Invitation, NebulaProjection, Portrait, PortraitDraft, PublicPortraitView } from '@/domain'
 
 import { storageAdapter } from './adapters/storageAdapter'
 import type { DataAdapter } from './adapters/memoryAdapter'
@@ -25,6 +25,12 @@ interface DataContextValue {
   canEnroll: (identityId: string) => boolean
   /** 接受邀请（DEC-003.5）：接受后才开启会话入口；不设拒绝操作 */
   acceptInvitation: (invitationId: string) => void
+  /** 创建/更新当前演示身份的 Portrait（T3）：默认保留既有公开状态，新建默认为未公开 */
+  savePortrait: (draft: PortraitDraft, options?: { isPublic?: boolean }) => void
+  /** 明确确认后才公开（DEC-002.3）；预览不自动公开 */
+  publishPortrait: () => void
+  /** 撤回公开（DEC-003.2/3/4）：退出公共列表与星云、暂停主动打招呼；已有互动保留 */
+  withdrawPortrait: () => void
   resetDemo: () => void
 }
 
@@ -121,6 +127,43 @@ export function DataProvider({ children, adapter = storageAdapter }: { children:
             : state.conversations,
         }
         persist(next)
+      },
+      savePortrait: (draft, options) => {
+        const existing = state.portraits.find((p) => p.ownerId === state.currentUserId)
+        const next: Portrait = {
+          id: existing?.id ?? 'p-me',
+          ownerId: state.currentUserId,
+          nickname: draft.nickname.trim(),
+          interestTags: draft.interestTags,
+          socialIntents: draft.socialIntents,
+          bio: draft.bio?.trim() || undefined,
+          mbti: draft.mbti || undefined,
+          zodiac: draft.zodiac || undefined,
+          relationshipStatus: draft.relationshipStatus,
+          isPublic: options?.isPublic ?? existing?.isPublic ?? false,
+          updatedAt: new Date().toISOString(),
+        }
+        persist({
+          ...state,
+          portraits: existing ? state.portraits.map((p) => (p.id === existing.id ? next : p)) : [...state.portraits, next],
+        })
+      },
+      publishPortrait: () => {
+        const existing = state.portraits.find((p) => p.ownerId === state.currentUserId)
+        if (!isBasicComplete(existing)) return
+        persist({
+          ...state,
+          portraits: state.portraits.map((p) => (p.id === existing.id ? { ...p, isPublic: true, updatedAt: new Date().toISOString() } : p)),
+        })
+      },
+      withdrawPortrait: () => {
+        const existing = state.portraits.find((p) => p.ownerId === state.currentUserId)
+        if (!existing) return
+        // 仅改变公开标记；邀请、会话、报名与定向授权均不删除（DEC-003.3/4）
+        persist({
+          ...state,
+          portraits: state.portraits.map((p) => (p.id === existing.id ? { ...p, isPublic: false, updatedAt: new Date().toISOString() } : p)),
+        })
       },
       resetDemo: () => {
         persist(adapter.reset())
