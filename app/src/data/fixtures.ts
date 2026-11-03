@@ -2,7 +2,7 @@ import type {
   Activity,
   Conversation,
   DemoIdentity,
-  EnrollmentFixture,
+  Enrollment,
   InteractionAccess,
   Invitation,
   Portrait,
@@ -30,6 +30,14 @@ export const DEMO_IDENTITIES: DemoIdentity[] = [
   { id: 'u-yun', displayName: '云栖', isDemoContext: true },
   { id: 'u-qian', displayName: '千屿', isDemoContext: true },
   { id: 'u-yizhou', displayName: '一舟', isDemoContext: true },
+  { id: 'u-jiang', displayName: '江屿', isDemoContext: true },
+  { id: 'u-muzi', displayName: '木子', isDemoContext: true },
+  { id: 'u-wanfeng', displayName: '晚风', isDemoContext: true },
+  { id: 'u-zhiwan', displayName: '知晚', isDemoContext: true },
+  { id: 'u-luming', displayName: '鹿鸣', isDemoContext: true },
+  { id: 'u-yuyuan', displayName: '芋圆', isDemoContext: true },
+  { id: 'u-qingye', displayName: '青野', isDemoContext: true },
+  { id: 'u-zhizi', displayName: '栀子', isDemoContext: true },
 ]
 
 const t = (s: string) => s
@@ -109,6 +117,40 @@ export const DEMO_PORTRAITS: Portrait[] = [
     updatedAt: t('2026-11-01T10:30:00+08:00'),
   },
   {
+    id: 'p-jiang',
+    ownerId: 'u-jiang',
+    nickname: '江屿',
+    interestTags: ['科研', 'AI', '论文'],
+    socialIntents: ['学习搭子', '比赛队友'],
+    bio: '医学院影像方向在读，对 AI 辅助诊断很感兴趣，想找一起做项目的伙伴。',
+    mbti: 'INTJ',
+    zodiac: '摩羯座',
+    isPublic: true,
+    updatedAt: t('2026-11-01T10:32:00+08:00'),
+  },
+  {
+    id: 'p-muzi',
+    ownerId: 'u-muzi',
+    nickname: '木子',
+    interestTags: ['绘画', '设计', '手账'],
+    socialIntents: ['交朋友'],
+    bio: '课余时间画水彩和做手账，想认识同样喜欢记录生活的朋友。',
+    mbti: 'INFP',
+    zodiac: '双鱼座',
+    isPublic: true,
+    updatedAt: t('2026-11-01T10:33:00+08:00'),
+  },
+  {
+    id: 'p-wanfeng',
+    ownerId: 'u-wanfeng',
+    nickname: '晚风',
+    interestTags: ['写作', '电影', '影评'],
+    socialIntents: ['交朋友'],
+    bio: '写点短篇和影评，相信文字和影像都能让人互相理解。',
+    isPublic: true,
+    updatedAt: t('2026-11-01T10:34:00+08:00'),
+  },
+  {
     // 情境四：撤回公开后仍有互动（报名保留）的合成用户
     id: 'p-yizhou',
     ownerId: 'u-yizhou',
@@ -118,6 +160,60 @@ export const DEMO_PORTRAITS: Portrait[] = [
     bio: '在准备校内黑客松，想找对 AI 和校园服务方向感兴趣的队友。',
     isPublic: false,
     updatedAt: t('2026-11-01T10:35:00+08:00'),
+  },
+  {
+    id: 'p-zhiwan',
+    ownerId: 'u-zhiwan',
+    nickname: '知晚',
+    interestTags: ['自习', '备考', '咖啡'],
+    socialIntents: ['学习搭子'],
+    bio: '期末常驻图书馆，相信一起自习比独自硬撑更高效。',
+    isPublic: true,
+    updatedAt: t('2026-11-01T10:36:00+08:00'),
+  },
+  {
+    id: 'p-luming',
+    ownerId: 'u-luming',
+    nickname: '鹿鸣',
+    interestTags: ['播客', '阅读', '心理学'],
+    socialIntents: ['交朋友', '学习搭子'],
+    bio: '通勤路上听播客，周末泡书店，最近在读社会心理学。',
+    mbti: 'INFJ',
+    zodiac: '巨蟹座',
+    isPublic: true,
+    updatedAt: t('2026-11-01T10:37:00+08:00'),
+  },
+  {
+    id: 'p-yuyuan',
+    ownerId: 'u-yuyuan',
+    nickname: '芋圆',
+    interestTags: ['摄影', '旅行', '徒步'],
+    socialIntents: ['活动搭子', '交朋友'],
+    bio: '喜欢背着相机到处走，拍校园和旅行中的风景。',
+    mbti: 'ENFP',
+    zodiac: '射手座',
+    isPublic: true,
+    updatedAt: t('2026-11-01T10:38:00+08:00'),
+  },
+  {
+    id: 'p-qingye',
+    ownerId: 'u-qingye',
+    nickname: '青野',
+    interestTags: ['英语交流', '演讲', '辩论'],
+    socialIntents: ['英语口语搭子', '比赛队友'],
+    bio: '在准备英语演讲比赛，想找一起练口语和打磨稿子的搭档。',
+    isPublic: true,
+    updatedAt: t('2026-11-01T10:39:00+08:00'),
+  },
+  {
+    id: 'p-zhizi',
+    ownerId: 'u-zhizi',
+    nickname: '栀子',
+    interestTags: ['音乐', '唱歌', '吉他'],
+    socialIntents: ['交朋友', '活动搭子'],
+    bio: '吉他社成员，喜欢弹唱和现场音乐，想找一起排练的小伙伴。',
+    isPublic: true,
+    updatedAt: t('2026-11-01T10:40:00+08:00'),
   },
 ]
 
@@ -171,7 +267,13 @@ export const DEMO_INVITATIONS: Invitation[] = [
     fromId: 'u-xia',
     toId: 'me',
     status: 'pending',
-    message: '你好！看到你也喜欢英语交流，想认识一下，一起练口语～',
+    greetingText: '你好！看到你也喜欢英语交流，想认识一下，一起练口语～',
+    basicSnapshot: {
+      portraitId: 'p-xia',
+      nickname: '夏一川',
+      interestTags: ['英语交流', '辩论', '旅行'],
+      socialIntents: ['英语口语搭子', '比赛队友'],
+    },
     createdAt: t('2026-11-01T11:00:00+08:00'),
   },
   {
@@ -180,6 +282,13 @@ export const DEMO_INVITATIONS: Invitation[] = [
     toId: 'me',
     status: 'accepted',
     conversationId: 'conv-1',
+    greetingText: '你好！喜欢你的兴趣标签，想认识一下～',
+    basicSnapshot: {
+      portraitId: 'p-lin',
+      nickname: '林间风',
+      interestTags: ['羽毛球', '编程', '电影', '摄影'],
+      socialIntents: ['交朋友', '活动搭子'],
+    },
     createdAt: t('2026-10-30T09:00:00+08:00'),
   },
 ]
@@ -197,8 +306,21 @@ export const DEMO_CONVERSATIONS: Conversation[] = [
 ]
 
 /** 已有报名样例：一舟（已撤回公开）报名仍保留，组织者千屿可查看其基础 Portrait。 */
-export const DEMO_ENROLLMENTS: EnrollmentFixture[] = [
-  { id: 'enr-1', activityId: 'a-hackathon', enrolleeId: 'u-yizhou', organizerId: 'u-qian', note: 'fixture' },
+export const DEMO_ENROLLMENTS: Enrollment[] = [
+  {
+    id: 'enr-1',
+    activityId: 'a-hackathon',
+    enrolleeId: 'u-yizhou',
+    organizerId: 'u-qian',
+    status: 'pending',
+    basicSnapshot: {
+      portraitId: 'p-yizhou',
+      nickname: '一舟',
+      interestTags: ['比赛', '开发'],
+      socialIntents: ['比赛队友'],
+    },
+    createdAt: t('2026-11-01T12:00:00+08:00'),
+  },
 ]
 
 export const DEMO_INTERACTION_ACCESS: InteractionAccess[] = [

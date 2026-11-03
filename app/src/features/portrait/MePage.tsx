@@ -1,31 +1,40 @@
-import { EyeOff, PenLine, RotateCcw } from 'lucide-react'
+import { EyeOff, PenLine, RotateCcw, Users } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { useData } from '@/data/DataProvider'
 import { Button } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
+import { GradientAvatar, gradientFor } from '@/shared/ui/GradientAvatar'
 import { PageHeader } from '@/shared/ui/PageHeader'
 import { Tag } from '@/shared/ui/Tag'
 
 /**
- * P10 我的：Portrait 完成/公开状态、编辑入口、公开/撤回、关系状态与动态位置预留。
+ * P10 我的：Portrait 完成/公开状态、编辑入口、公开/撤回、身份切换、关系状态与动态位置预留。
+ * Q1 已确认：合成身份切换（演示模式，非真实登录）。
  * 撤回公开（DEC-003）：退出公开列表与星云、暂停主动打招呼；已有邀请/会话/报名保留。
  */
 export default function MePage() {
-  const { myPortrait, withdrawPortrait, resetDemo } = useData()
+  const { state, myPortrait, withdrawPortrait, resetDemo, switchIdentity } = useData()
+  const currentIdentity = state.identities.find((i) => i.id === state.currentUserId)
+  const otherIdentities = state.identities.filter((i) => i.id !== state.currentUserId)
 
   return (
     <div>
       <PageHeader title="我的" subtitle="自我表达、资料与社交边界。" />
 
-      <Card className="mb-4">
-        {myPortrait ? (
-          <div>
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold">{myPortrait.nickname}</h2>
+      {myPortrait ? (
+        <Card className="relative mb-4 overflow-hidden !p-0">
+          <div className={`relative h-24 bg-gradient-to-br ${gradientFor(myPortrait.id)}`}>
+            <span className="absolute -left-6 -top-8 h-24 w-24 rounded-full bg-white/25 blur-2xl" />
+            <span className="absolute bottom-0 right-8 h-14 w-14 rounded-full bg-white/20 blur-xl" />
+          </div>
+          <div className="px-4 pb-4 md:px-5 md:pb-5">
+            <div className="-mt-10 flex items-end justify-between">
+              <GradientAvatar seed={myPortrait.id} text={myPortrait.nickname} size="xl" className="ring-4 ring-card" />
               <Tag tone={myPortrait.isPublic ? 'mint' : 'neutral'}>{myPortrait.isPublic ? '已公开' : '未公开'}</Tag>
             </div>
-            {myPortrait.bio ? <p className="mt-2 text-sm leading-relaxed text-ink-sub">{myPortrait.bio}</p> : null}
+            <h2 className="mt-3 text-lg font-bold">{myPortrait.nickname}</h2>
+            {myPortrait.bio ? <p className="mt-1.5 text-sm leading-relaxed text-ink-sub">{myPortrait.bio}</p> : null}
             <div className="mt-3 flex flex-wrap gap-1.5">
               {myPortrait.interestTags.map((t) => (
                 <Tag key={t} tone="mint">{t}</Tag>
@@ -40,21 +49,22 @@ export default function MePage() {
                 : '当前状态：不出现在公开列表与星云，不能主动打招呼；仍可以凭基础 Portrait 向组织者展示并报名（DEC-002.4）。'}
             </p>
           </div>
-        ) : (
-          <div className="text-center">
-            <p className="text-sm font-semibold">你还没有创建 Portrait</p>
-            <p className="mt-1 text-xs leading-relaxed text-ink-sub">
-              你可以先自由浏览同学和活动；首次互动（打招呼 / 报名）前，再花一分钟完成基础 Portrait：
-              昵称 + 至少 1 个兴趣标签 + 至少 1 项社交意图（DEC-002）。
-            </p>
-            <Link to="/me/portrait/edit" className="mt-3 inline-block">
-              <Button>
-                <PenLine size={14} /> 创建我的 Portrait
-              </Button>
-            </Link>
-          </div>
-        )}
-      </Card>
+        </Card>
+      ) : (
+        <Card className="mb-4 flex flex-col items-center gap-2 py-8 text-center">
+          <GradientAvatar seed={state.currentUserId} text="我" size="xl" />
+          <p className="text-sm font-bold">你还没有创建 Portrait</p>
+          <p className="max-w-sm text-xs leading-relaxed text-ink-sub">
+            你可以先自由浏览同学和活动；首次互动（打招呼 / 报名）前，再花一分钟完成基础 Portrait：
+            昵称 + 至少 1 个兴趣标签 + 至少 1 项社交意图（DEC-002）。
+          </p>
+          <Link to="/me/portrait/edit" className="mt-2">
+            <Button>
+              <PenLine size={14} /> 创建我的 Portrait
+            </Button>
+          </Link>
+        </Card>
+      )}
 
       {myPortrait ? (
         <div className="mb-4 flex flex-wrap gap-2">
@@ -82,6 +92,30 @@ export default function MePage() {
           </p>
         </Card>
       ) : null}
+
+      {/* Q1：身份切换器（演示模式） */}
+      <Card className="mb-4 border border-primary/20 bg-primary-soft/20">
+        <div className="flex items-center gap-2">
+          <Users size={16} className="text-primary" />
+          <h3 className="text-sm font-bold">演示身份切换</h3>
+          <Tag tone="neutral">演示模式</Tag>
+        </div>
+        <p className="mt-1 text-xs leading-relaxed text-ink-sub">
+          当前身份：<span className="font-medium text-ink">{currentIdentity?.displayName ?? '未知'}</span>
+          。可切换到其他合成身份体验对方视角（如查看收到的招呼、处理报名）。仅用于演示，非真实登录，换设备不共享。
+        </p>
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {otherIdentities.map((id) => (
+            <button
+              key={id.id}
+              onClick={() => switchIdentity(id.id)}
+              className="rounded-full bg-card px-3 py-1 text-xs font-medium text-ink-sub transition-colors hover:bg-primary-soft hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              {id.displayName}
+            </button>
+          ))}
+        </div>
+      </Card>
 
       <Card className="mb-4 border border-dashed border-ink-sub/30 bg-card/60">
         <h3 className="text-sm font-bold">关系状态与个人动态</h3>

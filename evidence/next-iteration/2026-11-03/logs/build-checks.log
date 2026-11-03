@@ -1,0 +1,8 @@
+== node ==
+v22.22.2
+== npm ==
+10.9.7
+== tsc ==
+TSC_EXIT=0
+LINT_EXIT=0
+BUILD_EXIT=0

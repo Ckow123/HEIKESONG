@@ -9,6 +9,13 @@ export type RelationshipStatus = 'in_relationship' | 'undisclosed'
  * Portrait 个人心灵画像（DEC-002）：
  * 必填 = 昵称 + 至少 1 个兴趣标签 + 至少 1 项社交意图；其余选填。
  * 「基础资料完整」与「已公开」是两个独立条件。
+ *
+ * PR-1 公开内容隔离：编辑草稿字段直接存于 Portrait 顶层；
+ * `publicSnapshot` 存储用户已明确确认公开的内容快照（A 版本）。
+ * 编辑期间公共入口读取 publicSnapshot 而非草稿字段，
+ * 确认公开后 publicSnapshot 原子替换为草稿内容。
+ * 候选 A（草稿分离）与候选 B（暂撤）的选择未定，
+ * 此结构对两种方案均兼容，不自行改变状态语义。
  */
 export interface Portrait {
   id: PortraitId
@@ -25,6 +32,8 @@ export interface Portrait {
   /** 公开标记：预览不等于公开；可撤回 */
   isPublic: boolean
   updatedAt: string
+  /** 已确认公开的内容快照（PR-1）；公共入口优先读取此字段而非草稿 */
+  publicSnapshot?: PublicPortraitView
 }
 
 /** 由预览确认后的公开内容；公共列表、公共详情、星云共用同一公开范围。 */
@@ -56,4 +65,15 @@ export interface InteractionAccess {
   portraitId: PortraitId
   viewerId: IdentityId
   source: { kind: 'invitation' | 'conversation' | 'enrollment'; refId: string }
+}
+
+/**
+ * 基础定向资料视图（Q5a 已确认：只取三项必填）。
+ * 组织者/邀请接收者查看对方时只返回这三项，不包含选填字段。
+ */
+export interface BasicPortraitView {
+  portraitId: PortraitId
+  nickname: string
+  interestTags: string[]
+  socialIntents: string[]
 }
