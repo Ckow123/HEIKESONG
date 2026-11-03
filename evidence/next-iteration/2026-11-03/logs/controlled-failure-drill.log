@@ -1,0 +1,198 @@
+FAIL P01-discover@375 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/discover
+Call log:
+[2m  - navigating to "http://localhost:5999/discover", waiting until "networkidle"[22m
+
+FAIL P02-people@375 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/discover/people
+Call log:
+[2m  - navigating to "http://localhost:5999/discover/people", waiting until "networkidle"[22m
+
+FAIL P03-portrait-detail@375 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/people/p-lin
+Call log:
+[2m  - navigating to "http://localhost:5999/people/p-lin", waiting until "networkidle"[22m
+
+FAIL P04-activities@375 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/discover/activities
+Call log:
+[2m  - navigating to "http://localhost:5999/discover/activities", waiting until "networkidle"[22m
+
+FAIL P05-activity-detail@375 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/activities/a-badminton
+Call log:
+[2m  - navigating to "http://localhost:5999/activities/a-badminton", waiting until "networkidle"[22m
+
+FAIL P06-nebula@375 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/nebula
+Call log:
+[2m  - navigating to "http://localhost:5999/nebula", waiting until "networkidle"[22m
+
+FAIL P07-square@375 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/square
+Call log:
+[2m  - navigating to "http://localhost:5999/square", waiting until "networkidle"[22m
+
+FAIL P08-messages@375 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/messages
+Call log:
+[2m  - navigating to "http://localhost:5999/messages", waiting until "networkidle"[22m
+
+FAIL P09-conversation@375 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/messages/conv-1
+Call log:
+[2m  - navigating to "http://localhost:5999/messages/conv-1", waiting until "networkidle"[22m
+
+FAIL P10-me@375 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/me
+Call log:
+[2m  - navigating to "http://localhost:5999/me", waiting until "networkidle"[22m
+
+FAIL P11-portrait-edit@375 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/me/portrait/edit
+Call log:
+[2m  - navigating to "http://localhost:5999/me/portrait/edit", waiting until "networkidle"[22m
+
+FAIL P12-portrait-preview@375 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/me/portrait/preview
+Call log:
+[2m  - navigating to "http://localhost:5999/me/portrait/preview", waiting until "networkidle"[22m
+
+FAIL P01-discover@390 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/discover
+Call log:
+[2m  - navigating to "http://localhost:5999/discover", waiting until "networkidle"[22m
+
+FAIL P02-people@390 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/discover/people
+Call log:
+[2m  - navigating to "http://localhost:5999/discover/people", waiting until "networkidle"[22m
+
+FAIL P03-portrait-detail@390 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/people/p-lin
+Call log:
+[2m  - navigating to "http://localhost:5999/people/p-lin", waiting until "networkidle"[22m
+
+FAIL P04-activities@390 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/discover/activities
+Call log:
+[2m  - navigating to "http://localhost:5999/discover/activities", waiting until "networkidle"[22m
+
+FAIL P05-activity-detail@390 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/activities/a-badminton
+Call log:
+[2m  - navigating to "http://localhost:5999/activities/a-badminton", waiting until "networkidle"[22m
+
+FAIL P06-nebula@390 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/nebula
+Call log:
+[2m  - navigating to "http://localhost:5999/nebula", waiting until "networkidle"[22m
+
+FAIL P07-square@390 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/square
+Call log:
+[2m  - navigating to "http://localhost:5999/square", waiting until "networkidle"[22m
+
+FAIL P08-messages@390 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/messages
+Call log:
+[2m  - navigating to "http://localhost:5999/messages", waiting until "networkidle"[22m
+
+FAIL P09-conversation@390 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/messages/conv-1
+Call log:
+[2m  - navigating to "http://localhost:5999/messages/conv-1", waiting until "networkidle"[22m
+
+FAIL P10-me@390 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/me
+Call log:
+[2m  - navigating to "http://localhost:5999/me", waiting until "networkidle"[22m
+
+FAIL P11-portrait-edit@390 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/me/portrait/edit
+Call log:
+[2m  - navigating to "http://localhost:5999/me/portrait/edit", waiting until "networkidle"[22m
+
+FAIL P12-portrait-preview@390 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/me/portrait/preview
+Call log:
+[2m  - navigating to "http://localhost:5999/me/portrait/preview", waiting until "networkidle"[22m
+
+FAIL P01-discover@1280 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/discover
+Call log:
+[2m  - navigating to "http://localhost:5999/discover", waiting until "networkidle"[22m
+
+FAIL P02-people@1280 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/discover/people
+Call log:
+[2m  - navigating to "http://localhost:5999/discover/people", waiting until "networkidle"[22m
+
+FAIL P03-portrait-detail@1280 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/people/p-lin
+Call log:
+[2m  - navigating to "http://localhost:5999/people/p-lin", waiting until "networkidle"[22m
+
+FAIL P04-activities@1280 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/discover/activities
+Call log:
+[2m  - navigating to "http://localhost:5999/discover/activities", waiting until "networkidle"[22m
+
+FAIL P05-activity-detail@1280 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/activities/a-badminton
+Call log:
+[2m  - navigating to "http://localhost:5999/activities/a-badminton", waiting until "networkidle"[22m
+
+FAIL P06-nebula@1280 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/nebula
+Call log:
+[2m  - navigating to "http://localhost:5999/nebula", waiting until "networkidle"[22m
+
+FAIL P07-square@1280 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/square
+Call log:
+[2m  - navigating to "http://localhost:5999/square", waiting until "networkidle"[22m
+
+FAIL P08-messages@1280 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/messages
+Call log:
+[2m  - navigating to "http://localhost:5999/messages", waiting until "networkidle"[22m
+
+FAIL P09-conversation@1280 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/messages/conv-1
+Call log:
+[2m  - navigating to "http://localhost:5999/messages/conv-1", waiting until "networkidle"[22m
+
+FAIL P10-me@1280 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/me
+Call log:
+[2m  - navigating to "http://localhost:5999/me", waiting until "networkidle"[22m
+
+FAIL P11-portrait-edit@1280 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/me/portrait/edit
+Call log:
+[2m  - navigating to "http://localhost:5999/me/portrait/edit", waiting until "networkidle"[22m
+
+FAIL P12-portrait-preview@1280 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/me/portrait/preview
+Call log:
+[2m  - navigating to "http://localhost:5999/me/portrait/preview", waiting until "networkidle"[22m
+
+FAIL P01-discover@1440 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/discover
+Call log:
+[2m  - navigating to "http://localhost:5999/discover", waiting until "networkidle"[22m
+
+FAIL P02-people@1440 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/discover/people
+Call log:
+[2m  - navigating to "http://localhost:5999/discover/people", waiting until "networkidle"[22m
+
+FAIL P03-portrait-detail@1440 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/people/p-lin
+Call log:
+[2m  - navigating to "http://localhost:5999/people/p-lin", waiting until "networkidle"[22m
+
+FAIL P04-activities@1440 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/discover/activities
+Call log:
+[2m  - navigating to "http://localhost:5999/discover/activities", waiting until "networkidle"[22m
+
+FAIL P05-activity-detail@1440 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/activities/a-badminton
+Call log:
+[2m  - navigating to "http://localhost:5999/activities/a-badminton", waiting until "networkidle"[22m
+
+FAIL P06-nebula@1440 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/nebula
+Call log:
+[2m  - navigating to "http://localhost:5999/nebula", waiting until "networkidle"[22m
+
+FAIL P07-square@1440 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/square
+Call log:
+[2m  - navigating to "http://localhost:5999/square", waiting until "networkidle"[22m
+
+FAIL P08-messages@1440 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/messages
+Call log:
+[2m  - navigating to "http://localhost:5999/messages", waiting until "networkidle"[22m
+
+FAIL P09-conversation@1440 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/messages/conv-1
+Call log:
+[2m  - navigating to "http://localhost:5999/messages/conv-1", waiting until "networkidle"[22m
+
+FAIL P10-me@1440 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/me
+Call log:
+[2m  - navigating to "http://localhost:5999/me", waiting until "networkidle"[22m
+
+FAIL P11-portrait-edit@1440 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/me/portrait/edit
+Call log:
+[2m  - navigating to "http://localhost:5999/me/portrait/edit", waiting until "networkidle"[22m
+
+FAIL P12-portrait-preview@1440 :: navigate failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/me/portrait/preview
+Call log:
+[2m  - navigating to "http://localhost:5999/me/portrait/preview", waiting until "networkidle"[22m
+
+FAIL bottom-nav@390 :: bottom-nav check failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5999/discover
+Call log:
+[2m  - navigating to "http://localhost:5999/discover", waiting until "networkidle"[22m
+
+done -> D:\WorkBuddy Datebase\HEIKESONG\evidence\next-iteration\2026-11-03\logs\drill
+summary: 0/49 pass, 49 fail

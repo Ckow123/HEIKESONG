@@ -38,7 +38,18 @@ await page.goto(url + '#/discover/people')
 await page.waitForTimeout(500)
 r.push(['公开后进入找人列表', (await page.getByText('本地双击用户').count()) >= 1])
 
-for (const [name, ok] of r) console.log(ok ? 'PASS' : 'FAIL', '-', name)
-console.log('页面错误:', errors.length ? errors : '无')
+let failures = 0
+for (const [name, ok] of r) {
+  console.log(`${ok ? 'PASS' : 'FAIL'} ${name}`)
+  if (!ok) failures += 1
+}
+if (errors.length) {
+  console.log(`FAIL pageerror: ${errors.join(' | ')}`)
+  failures += 1
+} else {
+  console.log('PASS no pageerror')
+}
 await browser.close()
-process.exit(r.every(([, ok]) => ok) && !errors.length ? 0 : 1)
+const total = r.length + 1
+console.log(`summary: ${total - failures}/${total} pass, ${failures} fail`)
+process.exit(failures === 0 ? 0 : 1)

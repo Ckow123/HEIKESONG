@@ -1,0 +1,297 @@
+现在可以正式进入 WorkBuddy V0.1 → V0.2 开发阶段了。
+
+我的建议是：先在朋友电脑上用 WorkBuddy 的 Plan 模式验证工程环境和任务包，再切换到 Agent 执行模式，让主 Agent + 2 个子 Agent 开发。
+
+你已经让 Codex 完成了任务拆解，现阶段没有必要再重复调用 Codex。我们应该把 Token 和开发时间集中用于 WorkBuddy。
+
+## 一、WorkBuddy 应该选什么模型、什么模式？
+
+我核对了 WorkBuddy 当前官方文档。它支持 Plan（先规划）、Agent（执行）等工作模式，并提供 Kimi-K3、GLM-5.2、Kimi-K2.7-Code、MiniMax-M3 等模型。可用模型会随客户端和账号方案变化。
+
+[image](https://www.google.com/s2/favicons?domain=https://www.workbuddy.cn\&sz=32)
+
+WorkBuddy - AI Agent 办公新范式+1
+
+
+
+| 阶段            | 模式         | 推荐模型              | 思考强度          |
+| ------------- | ---------- | ----------------- | ------------- |
+| 1. 环境与任务核验    | Plan       | GLM-5.2           | High          |
+| 2. 主体开发与统筹    | Agent      | Kimi-K3           | High          |
+| 3. UI 子 Agent | Agent 下子任务 | Kimi-K3           | Medium / High |
+| 4. 测试子 Agent  | Agent 下子任务 | Kimi-K2.7-Code    | Medium        |
+| 5. 最终集成与修复    | Agent      | Kimi-K3 或 GLM-5.2 | High          |
+
+Kimi-K3 在官方模型说明中被定位为适合长程任务和前端开发的模型，因此我优先推荐它承担 UI 实现和整体集成。GLM-5.2 可以用于任务理解、复杂文档与工程规划。
+
+[image](https://www.google.com/s2/favicons?domain=https://www.workbuddy.cn\&sz=32)
+
+WorkBuddy - AI Agent 办公新范式+1
+
+
+
+如果客户端不能给子 Agent 单独配置模型，就让它们继承主 Agent 模型，不必为了节省少量 Token 反复切换。
+
+上下文窗口先选 300K 左右（如可设置），不用一开始就开 1M。 任务已经拆分成五份 MD，按模块读取更节省成本。
+
+## 二、先解决朋友电脑上的工程环境
+
+这里需要区分两个概念。
+
+- 项目代码存在：仓库中有 `app/src/`、`package.json`、`package-lock.json`。
+- 项目依赖已安装：朋友电脑的 `app/node_modules/` 内有与锁文件匹配的可用依赖。
+
+React、Vite、TypeScript、Tailwind 不需要逐个进行全局安装。通常只需在正确的 `app` 目录执行一次 `npm ci`，即可按照现有锁文件安装项目依赖。
+
+当前 Vite 8 要求 Node.js 20.19+ 或 22.12+ 的兼容版本。
+
+[image](https://www.google.com/s2/favicons?domain=https://vite.dev\&sz=32)
+
+Vite
+
+&#x20;此前 WorkBuddy 的运行记录显示朋友机器曾使用 Node.js 22.22.2，但这不是对朋友电脑当前状态的再次验证。
+
+
+
+因此第一轮只检查，不直接重装。
+
+还有一点：Codex 刚生成的五份 MD 目前是你本地的新增文件，并没有提交到 GitHub。在朋友电脑的 WorkBuddy 启动任务前，先把整个 `docs/workbuddy-tasks/` 文件夹复制到朋友实际打开的 `HEIKESONG` 工程下。不要覆盖对方已有源码。
+
+## 三、第一段：发送给 WorkBuddy Plan 模式
+
+先执行
+
+模型 GLM-5.2 · High · Plan
+
+你现在担任「同频 Campus」V0.1 → V0.2 的 WorkBuddy 主 Agent。
+
+项目属于温州医科大学黑客松，比赛规定 WorkBuddy 必须完成主体开发。
+
+目前已经有 React + Vite + TypeScript + Tailwind CSS 工程以及 Codex 生成的五份开发任务文档。
+
+本轮只使用 Plan 模式检查现状和规划执行，不修改源码、不安装依赖、不提交或部署。
+
+## 一、定位真实工作区
+
+优先检查当前 WorkBuddy 打开的工程根目录是否包含：
+
+- AGENTS.md
+- README.md
+- app/package.json
+- app/package-lock.json
+- app/src/
+- docs/workbuddy-tasks/00_MASTER_PLAN.md
+- docs/workbuddy-tasks/01_PRIVACY_STATE.md
+- docs/workbuddy-tasks/02_CORE_FLOW_DECISIONS.md
+- docs/workbuddy-tasks/03_FRONTEND_UI.md
+- docs/workbuddy-tasks/04_TESTS_AND_HANDOFF.md
+- refer-picture/ 八张参考图
+
+历史朋友端目录可能是：
+
+D:\WorkBuddy Datebase\HEIKESONG
+
+但必须以当前实际工作区为准，不假定 E 盘路径存在。
+
+核对 Git 分支、HEAD 和工作区状态。参考基准 Commit：
+
+1a580a19d13b9719c134c6f367ff09d49ce2d483
+
+如果版本不同，报告差异，不自动 reset、checkout、覆盖或拉取。
+
+## 二、环境检查
+
+只读检查以下内容：
+
+1. Windows、Node.js、npm、Git 版本及实际路径。
+2. app/package.json 和 package-lock.json 是否完整。
+3. app/node_modules 是否存在。
+4. React、React DOM、Vite、TypeScript、Tailwind CSS、React Router、Lucide、Playwright 是否在当前工程中正确安装。
+5. npm ls --depth=0 是否报告缺失或不匹配依赖。
+6. package.json 中的 dev、build、lint 脚本是否可识别。
+7. 检查当前 frontend-design Skill 是否已经安装，并确认当前 WorkBuddy Agent 是否能够正常读取它的 SKILL.md。
+8. 检查磁盘空间及是否存在可能阻碍 npm 安装的权限或网络错误。
+
+本轮不要执行 npm ci、npm install、npm update，不执行会写入产物的构建或测试脚本。
+
+如果发现未安装、版本不兼容或依赖损坏，列出修复命令、执行位置及副作用，等待确认后再执行。
+
+禁止使用 npm create vite 创建新项目，不得重新初始化 React 工程。
+
+## 三、恢复开发基线
+
+按需分模块阅读：
+
+AGENTS.md\
+docs/01_DECISION_LEDGER.md\
+docs/07_WORKBUDDY_HANDOFF_V0.md\
+docs/workbuddy-tasks/00_MASTER_PLAN.md\
+docs/workbuddy-tasks/01_PRIVACY_STATE.md\
+docs/workbuddy-tasks/02_CORE_FLOW_DECISIONS.md\
+docs/workbuddy-tasks/03_FRONTEND_UI.md\
+docs/workbuddy-tasks/04_TESTS_AND_HANDOFF.md
+
+恢复 DEC-001～006 和 T0～T9。
+
+不要将未确认的社交业务方案视为已获批准。
+
+## 四、子 Agent 分工
+
+按照任务文件执行文件所有权规划，原则上：
+
+主 Agent：\
+独占 app/src/data、domain、app 路由与共享配置，以及 Portrait、消息、活动详情核心业务逻辑。
+
+子 Agent A：\
+负责 discovery、ActivitiesPage、nebula、square 及约定的独立视觉资源。\
+必须使用已安装的 frontend-design Skill。
+
+子 Agent B：\
+负责 app/scripts 和新建的验收证据，不直接修改业务源码。
+
+如果发现文件冲突，先提出明确的文件所有权调整方案，不允许同时编辑同一个文件。
+
+## 五、输出执行计划
+
+请报告：
+
+A. 真实工作区路径、Git 状态与文件完整性。
+
+B. 环境检查结果，每项标记 PASS / FAIL / 未验证。
+
+C. 是否需要安装 Node.js 或 npm 依赖；如需要，给出精确修复步骤。
+
+D. 五份 MD 是否完整读取及有无冲突。
+
+E. 主 Agent 与两个子 Agent 的独占任务和依赖关系。
+
+F. 哪些权限、安全和 UI 修复可以立刻开发。
+
+G. 哪些业务需要人工决策才能开发。
+
+H. 推荐的执行批次与每批验收方式。
+
+不要重复早期需求访谈，不重新设计产品，不擅改 DEC-001～006。
+
+最终停止于 Plan 审阅阶段，等待我批准执行。
+
+这一步完成后，WorkBuddy 应该能明确告诉你朋友电脑是否真正缺少依赖。
+
+如果环境检查失败，我们先解决环境；如果通过，再进入开发。
+
+## 四、第二段：确认 Plan 后执行开发
+
+只有第一段环境检查和文件所有权计划没有明显问题时，再在 WorkBuddy 点击「开始执行」或切换到默认 Agent 模式（不同客户端可能显示为“做一做”）。官方文档说明 Plan 可以先审阅，批准后再进入执行。
+
+[image](https://www.google.com/s2/favicons?domain=https://www.codebuddy.cn\&sz=32)
+
+WorkBuddy - AI Agent 办公新范式
+
+
+
+第二阶段
+
+模型 Kimi-K3 · High · Agent
+
+继续执行已经审阅通过的「同频 Campus」V0.2 开发计划。
+
+本轮 WorkBuddy 是主体开发工具，采用主 Agent + 2 个子 Agent 的分工。
+
+## 执行前置条件
+
+首先确认：
+
+- 当前工程与已核对的 Git 基准一致，已有更改未被覆盖。
+- 五份 docs/workbuddy-tasks/ 文件存在。
+- frontend-design Skill 可用。
+- 子 Agent 文件所有权已经明确。
+
+若环境检查确定缺少项目依赖，并且我已批准依赖安装，可以在实际 app 目录执行 npm ci。必须使用现有 package-lock.json，不升级依赖、不创建新项目。安装过程若报错，保留日志并停止进一步修改。
+
+如果 Node.js 不兼容或需要全局安装软件，先报告，不擅自升级系统环境。
+
+## Batch 1：权限和共享契约
+
+由主 Agent 执行：
+
+- 修复已公开 Portrait 编辑后未经再次确认即更新公共资料的缺陷。
+- 核查邀请接受、会话参与者和定向资料访问权限。
+- 补充必要的状态及权限负向测试。
+- 不实现未经确认的拒绝邀请、重复发送或活动审核规则。
+
+## Batch 2：并行开发
+
+在 Batch 1 的共享数据契约稳定后：
+
+子 Agent A：\
+按 03_FRONTEND_UI.md 开发。\
+调用 frontend-design Skill，逐项参考 refer-picture 原图。\
+优先改进首页、搜索、活动分类、活动卡片和星云视觉。\
+保留导航与既有业务规则。
+
+子 Agent B：\
+按 04_TESTS_AND_HANDOFF.md 改进测试脚本和验收机制。\
+验证失败时必须返回非零退出码。\
+逐路由检查双视口布局、交互和横向溢出。\
+不修改功能业务源码。
+
+主 Agent：\
+负责子任务协调、权限与状态管理、独占业务页面和最终集成。\
+02_CORE_FLOW_DECISIONS.md 中仍待确认的候选业务不得直接编码。
+
+## Batch 3：集成和真实测试
+
+在已批准的范围内运行：
+
+- TypeScript 类型检查
+- npm run lint
+- npm run build
+- 本地开发服务器
+- 本地生产预览
+- Playwright 回归测试
+
+测试 375px、390px、1280px、1440px 视口，覆盖 Portrait 创建、编辑、预览、公开、撤回、邀请接受与权限限制。
+
+记录所有错误和警告，不伪造 PASS。
+
+## 最终交付
+
+报告：
+
+1. 主 Agent 和两个子 Agent 分别完成的工作。
+2. 实际修改文件与所有权。
+3. 真实环境和依赖安装结果。
+4. 新增或修复的功能。
+5. 测试命令、退出码及失败项。
+6. 对照参考图的 UI 改进与截图。
+7. 未解决问题及需要人工决定的业务。
+8. WorkBuddy 主体开发的真实过程证据。
+
+只在批准的当前工作区开发。
+
+不擅改 DEC-001～006，不修改历史验收证据，不接真实后端、不提交、不推送、不部署。
+
+完成 Batch 1 后先汇报关键变更和测试结果；其余任务按批准的计划继续执行，遇到业务边界不明确时暂停对应动作。
+
+## 五、如何进一步节省 Token？
+
+真正节省 Token 的方法不是让很多模型同时运行，而是避免它们反复读取同样的文件和互相覆盖。
+
+- 主 Agent 只需一次读取五份任务文件，向子 Agent 传递各自有关的任务与接口契约。
+- UI Agent 负责有视觉输入的任务，不需要阅读完整历史 JSON。
+- 测试 Agent 只读取测试任务、对应业务规则和所测源码，不参与产品方案讨论。
+- 不对已经稳定的功能无差别重新设计，优先修复已知缺陷。
+
+还要强调一件事：`frontend-design` 负责改善视觉质量，但它不会自动让业务功能变完整。使用 Skill 时仍要让 WorkBuddy 验证是否实际加载，并保留使用记录。
+
+## 六、当前最合适的推进顺序
+
+1. 将五份任务 MD 复制到朋友实际使用的 WorkBuddy 工程中。
+2. 使用 Plan + GLM-5.2 + High 运行第一段提示词，确认工程和安装环境。
+3. 依据 Plan 结果批准必要的 `npm ci` 和开发范围，不升级技术栈。
+4. 使用 Agent + Kimi-K3 + High 执行第二段提示词，主 Agent 统筹两个子 Agent。
+5. 每个批次保留 WorkBuddy 报告和真实截图，再交给我核对，无需每次重新启动 Codex。
+
+现在先发送第一段 Plan 提示词即可。 尤其不要因为朋友电脑疑似没有安装 React/Vite，就让 WorkBuddy重新创建 React 项目——我们已经有完整源码和依赖锁文件，优先验证并复用原有工程。
+
+拿到 WorkBuddy 的环境检查和 Plan 结果后，再正式批准 Agent 执行，能最大程度减少返工。
