@@ -1,0 +1,119 @@
+
+> app@0.0.0 lint
+> oxlint
+
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+    ,-[src/shared/ui/GradientAvatar.tsx:14:17]
+ 13 | 
+ 14 | export function gradientFor(seed: string): string {
+    :                 ^^^^^^^^^^^
+ 15 |   let h = 0
+    `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+     ,-[src/data/DataProvider.tsx:448:17]
+ 447 | 
+ 448 | export function useData(): DataContextValue {
+     :                 ^^^^^^^
+ 449 |   const ctx = useContext(DataContext)
+     `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Move your component(s) to a separate file.
+    ,-[src/app/router.tsx:16:7]
+ 15 |  */
+ 16 | const DiscoveryPage = lazy(() => import('@/features/discovery/DiscoveryPage'))
+    :       ^^^^^^^^^^^^^
+ 17 | const PeoplePage = lazy(() => import('@/features/discovery/PeoplePage'))
+    `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Move your component(s) to a separate file.
+    ,-[src/app/router.tsx:17:7]
+ 16 | const DiscoveryPage = lazy(() => import('@/features/discovery/DiscoveryPage'))
+ 17 | const PeoplePage = lazy(() => import('@/features/discovery/PeoplePage'))
+    :       ^^^^^^^^^^
+ 18 | const PortraitDetailPage = lazy(() => import('@/features/portrait/PortraitDetailPage'))
+    `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Move your component(s) to a separate file.
+    ,-[src/app/router.tsx:18:7]
+ 17 | const PeoplePage = lazy(() => import('@/features/discovery/PeoplePage'))
+ 18 | const PortraitDetailPage = lazy(() => import('@/features/portrait/PortraitDetailPage'))
+    :       ^^^^^^^^^^^^^^^^^^
+ 19 | const ActivitiesPage = lazy(() => import('@/features/activities/ActivitiesPage'))
+    `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Move your component(s) to a separate file.
+    ,-[src/app/router.tsx:19:7]
+ 18 | const PortraitDetailPage = lazy(() => import('@/features/portrait/PortraitDetailPage'))
+ 19 | const ActivitiesPage = lazy(() => import('@/features/activities/ActivitiesPage'))
+    :       ^^^^^^^^^^^^^^
+ 20 | const ActivityDetailPage = lazy(() => import('@/features/activities/ActivityDetailPage'))
+    `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Move your component(s) to a separate file.
+    ,-[src/app/router.tsx:20:7]
+ 19 | const ActivitiesPage = lazy(() => import('@/features/activities/ActivitiesPage'))
+ 20 | const ActivityDetailPage = lazy(() => import('@/features/activities/ActivityDetailPage'))
+    :       ^^^^^^^^^^^^^^^^^^
+ 21 | const NebulaPage = lazy(() => import('@/features/nebula/NebulaPage'))
+    `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Move your component(s) to a separate file.
+    ,-[src/app/router.tsx:21:7]
+ 20 | const ActivityDetailPage = lazy(() => import('@/features/activities/ActivityDetailPage'))
+ 21 | const NebulaPage = lazy(() => import('@/features/nebula/NebulaPage'))
+    :       ^^^^^^^^^^
+ 22 | const SquarePage = lazy(() => import('@/features/square/SquarePage'))
+    `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Move your component(s) to a separate file.
+    ,-[src/app/router.tsx:22:7]
+ 21 | const NebulaPage = lazy(() => import('@/features/nebula/NebulaPage'))
+ 22 | const SquarePage = lazy(() => import('@/features/square/SquarePage'))
+    :       ^^^^^^^^^^
+ 23 | const MessagesPage = lazy(() => import('@/features/messages/MessagesPage'))
+    `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Move your component(s) to a separate file.
+    ,-[src/app/router.tsx:23:7]
+ 22 | const SquarePage = lazy(() => import('@/features/square/SquarePage'))
+ 23 | const MessagesPage = lazy(() => import('@/features/messages/MessagesPage'))
+    :       ^^^^^^^^^^^^
+ 24 | const ConversationPage = lazy(() => import('@/features/messages/ConversationPage'))
+    `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Move your component(s) to a separate file.
+    ,-[src/app/router.tsx:24:7]
+ 23 | const MessagesPage = lazy(() => import('@/features/messages/MessagesPage'))
+ 24 | const ConversationPage = lazy(() => import('@/features/messages/ConversationPage'))
+    :       ^^^^^^^^^^^^^^^^
+ 25 | const MePage = lazy(() => import('@/features/portrait/MePage'))
+    `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Move your component(s) to a separate file.
+    ,-[src/app/router.tsx:25:7]
+ 24 | const ConversationPage = lazy(() => import('@/features/messages/ConversationPage'))
+ 25 | const MePage = lazy(() => import('@/features/portrait/MePage'))
+    :       ^^^^^^
+ 26 | const PortraitEditPage = lazy(() => import('@/features/portrait/PortraitEditPage'))
+    `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Move your component(s) to a separate file.
+    ,-[src/app/router.tsx:26:7]
+ 25 | const MePage = lazy(() => import('@/features/portrait/MePage'))
+ 26 | const PortraitEditPage = lazy(() => import('@/features/portrait/PortraitEditPage'))
+    :       ^^^^^^^^^^^^^^^^
+ 27 | const PortraitPreviewPage = lazy(() => import('@/features/portrait/PortraitPreviewPage'))
+    `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Move your component(s) to a separate file.
+    ,-[src/app/router.tsx:27:7]
+ 26 | const PortraitEditPage = lazy(() => import('@/features/portrait/PortraitEditPage'))
+ 27 | const PortraitPreviewPage = lazy(() => import('@/features/portrait/PortraitPreviewPage'))
+    :       ^^^^^^^^^^^^^^^^^^^
+ 28 | 
+    `----
+
+Found 14 warnings and 0 errors.
+Finished in 38ms on 51 files with 116 rules using 32 threads.
