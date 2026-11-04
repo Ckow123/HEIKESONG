@@ -95,7 +95,7 @@ export default function ConversationPage() {
         ) : null}
       </Card>
 
-      <Card className="flex flex-col gap-3">
+      <Card className="flex flex-col gap-3 bg-bg/40">
         {conversation.demoMessages.length === 0 ? (
           <p className="py-6 text-center text-sm text-ink-sub">会话已开启。真实收发消息的方式（本地模拟或联网）待团队确认。</p>
         ) : (
@@ -104,8 +104,8 @@ export default function ConversationPage() {
             return (
               <div key={i} className={`flex ${mine ? 'justify-end' : 'justify-start'}`}>
                 <span
-                  className={`max-w-[75%] rounded-2xl px-3.5 py-2 text-sm leading-relaxed ${
-                    mine ? 'rounded-br-md bg-primary text-white' : 'rounded-bl-md bg-bg text-ink'
+                  className={`max-w-[78%] rounded-2xl px-3.5 py-2.5 text-sm leading-6 shadow-sm ${
+                    mine ? 'rounded-br-md bg-primary text-white' : 'rounded-bl-md bg-card text-ink'
                   }`}
                 >
                   {m.text}

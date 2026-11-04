@@ -1,0 +1,17 @@
+PASS A1 编辑后进入预览页
+PASS A2 预览页显示草稿昵称
+PASS A3 公开后出现在找同频的人列表
+PASS B1 千屿详情页存在打招呼入口
+PASS B2 打招呼后出现待回应提示
+PASS B3 重复访问不再出现可发送的打招呼按钮
+PASS B4 千屿信息中心出现来自新同学的待处理邀请
+PASS B5 接受邀请后进入会话页
+PASS C1 活动详情存在申请报名入口
+PASS C2 报名后状态为待组织者确认
+PASS C3 组织者面板可见待确认申请
+PASS C4 申请者看到已确认状态
+PASS A4 我的页存在撤回公开入口
+PASS A5 撤回公开后从找同频的人列表消失
+PASS N1 未公开 Portrait 直达显示未公开提示
+done -> D:\WorkBuddy Datebase\HEIKESONG-PHASE02-VISUAL-20261104\evidence\phase02\PHASE02-20261104-01\after\smoke
+summary: 15/15 pass, 0 fail

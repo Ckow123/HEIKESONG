@@ -1,0 +1,10 @@
+== after @ worktree state (pre-commit) ==
+--- oxlint ---
+
+Found 14 warnings and 0 errors.
+Finished in 28ms on 51 files with 116 rules using 32 threads.
+lint exit=0
+--- build ---
+build exit=0
+--- tsc -b (after) ---
+tsc exit=0

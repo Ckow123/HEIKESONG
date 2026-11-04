@@ -11,7 +11,29 @@ import type {
 /**
  * 合成演示数据。全部人物、活动、邀请均为虚构样例，
  * 不包含真实照片、联系方式或现实师生身份。
+ *
+ * B1 / P0-01（Gate B 决策 1，Owner 已批准）：固定合成 fixtures 允许
+ * 根据明确的原始种子建立独立可信 publicSnapshot；旧 localStorage 中
+ * 无快照的公开资料不享受此待遇（不得伪造历史快照），由投影层暂停展示。
  */
+
+/** 为公开的种子 Portrait 建立与原始种子一致的可信公开快照 */
+function withSeedSnapshot(p: Portrait): Portrait {
+  if (!p.isPublic) return p
+  return {
+    ...p,
+    publicSnapshot: {
+      portraitId: p.id,
+      nickname: p.nickname,
+      interestTags: [...p.interestTags],
+      socialIntents: [...p.socialIntents],
+      bio: p.bio,
+      mbti: p.mbti,
+      zodiac: p.zodiac,
+      relationshipStatus: p.relationshipStatus,
+    },
+  }
+}
 
 /** 当前演示身份（"我"）：初始未创建 Portrait，符合 DEC-002「先浏览」。 */
 export const CURRENT_USER: DemoIdentity = {
@@ -42,7 +64,7 @@ export const DEMO_IDENTITIES: DemoIdentity[] = [
 
 const t = (s: string) => s
 
-export const DEMO_PORTRAITS: Portrait[] = [
+export const DEMO_PORTRAITS: Portrait[] = ([
   {
     id: 'p-lin',
     ownerId: 'u-lin',
@@ -215,7 +237,7 @@ export const DEMO_PORTRAITS: Portrait[] = [
     isPublic: true,
     updatedAt: t('2026-11-01T10:40:00+08:00'),
   },
-]
+] as Portrait[]).map(withSeedSnapshot)
 
 export const DEMO_ACTIVITIES: Activity[] = [
   {

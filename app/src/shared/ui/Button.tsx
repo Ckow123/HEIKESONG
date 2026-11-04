@@ -4,14 +4,14 @@ type ButtonVariant = 'primary' | 'outline' | 'ghost'
 type ButtonSize = 'sm' | 'md'
 
 const variantClass: Record<ButtonVariant, string> = {
-  primary: 'bg-primary text-white hover:bg-primary/90',
-  outline: 'border border-primary text-primary hover:bg-primary-soft',
-  ghost: 'text-ink-sub hover:text-ink',
+  primary: 'bg-primary text-white shadow-button hover:bg-primary/90 hover:shadow-card-hover',
+  outline: 'border border-primary/30 bg-card text-primary hover:border-primary/55 hover:bg-primary-soft',
+  ghost: 'text-ink-sub hover:bg-primary-soft/70 hover:text-primary',
 }
 
 const sizeClass: Record<ButtonSize, string> = {
-  sm: 'px-3 py-1 text-xs',
-  md: 'px-4 py-2 text-sm',
+  sm: 'min-h-10 px-4 py-2 text-xs',
+  md: 'min-h-11 px-5 py-2.5 text-sm',
 }
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

@@ -35,12 +35,34 @@ export default function PortraitDetailPage() {
 
   const viewerId = state.currentUserId
   const isSelf = portrait.ownerId === viewerId
-  const isPublicView = portrait.isPublic
+  // B1/P0-01：公开且具可信快照才算公共可见；公开但无快照 = 暂停展示，等待本人重新确认
+  const hasTrustedSnapshot = Boolean(portrait.publicSnapshot)
+  const isPublicView = portrait.isPublic && hasTrustedSnapshot
   // Q2：检查同方向已有邀请
   const existingInvitation = state.invitations.find(
     (i) => i.fromId === viewerId && i.toId === portrait.ownerId,
   )
   const allowed = isPublicView || canViewBasicPortrait(viewerId, portrait.id)
+
+  // B1/P0-01：旧公开资料缺少可信快照 → 对他人暂停展示，提示等待本人重新确认公开
+  if (portrait.isPublic && !hasTrustedSnapshot && !isSelf) {
+    return (
+      <div>
+        <PageHeader title="Portrait 详情" />
+        <Card className="flex flex-col items-center gap-3 py-10 text-center">
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-soft">
+            <ShieldCheck size={26} className="text-primary" />
+          </span>
+          <div>
+            <p className="text-sm font-bold">这份 Portrait 等待本人重新确认公开</p>
+            <p className="mx-auto mt-1 max-w-sm text-xs leading-relaxed text-ink-sub">
+              对方此前公开过资料，但需要本人重新预览并明确确认公开后才会恢复展示；草稿内容不会在确认前公开。
+            </p>
+          </div>
+        </Card>
+      </div>
+    )
+  }
 
   if (!allowed) {
     return (
@@ -71,6 +93,8 @@ export default function PortraitDetailPage() {
   const zodiac = publicView?.zodiac
   const relationshipStatus = publicView?.relationshipStatus
   const bio = publicView?.bio
+  // B1/P0-01：本人查看自己被暂停公开的资料时给出重新确认提示
+  const selfNeedsReconfirm = isSelf && portrait.isPublic && !hasTrustedSnapshot
 
   return (
     <div>
@@ -79,18 +103,32 @@ export default function PortraitDetailPage() {
         subtitle={isPublicView ? '已公开 · 内容以对方确认公开的范围为准' : '未公开 · 你因已有互动关系可查看基础信息（仅昵称 / 兴趣 / 社交意图）'}
       />
 
+      {selfNeedsReconfirm ? (
+        <Card className="mb-4 border border-primary/30 bg-primary-soft/40">
+          <p className="text-sm font-medium">你的公开资料需要重新确认公开</p>
+          <p className="mt-1 text-xs leading-relaxed text-ink-sub">
+            这份资料来自旧版本数据，缺少已确认的公开快照，已暂停在公共列表、星云与搜索中展示。
+            请重新预览并明确确认公开后恢复；草稿与已有邀请、会话、报名关系均保留。
+          </p>
+          <Link to="/me/portrait/preview" className="mt-2 inline-block">
+            <Button size="sm">去预览并确认公开</Button>
+          </Link>
+        </Card>
+      ) : null}
+
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[280px_minmax(0,1fr)_300px]">
         {/* 左侧资料栏 */}
         <Card className="relative overflow-hidden lg:self-start">
-          <div className={`absolute inset-x-0 top-0 h-20 bg-gradient-to-br opacity-90 ${gradientFor(portrait.id)}`}>
-            <span className="absolute -left-4 -top-6 h-16 w-16 rounded-full bg-white/25 blur-xl" />
-            <span className="absolute -right-3 bottom-0 h-12 w-12 rounded-full bg-white/20 blur-lg" />
+          <div className={`absolute inset-x-0 top-0 h-24 bg-gradient-to-br opacity-95 ${gradientFor(portrait.id)}`}>
+            <span className="absolute -left-5 -top-8 h-24 w-24 rounded-full border-[12px] border-white/25" />
+            <span className="absolute -right-4 bottom-0 h-14 w-14 rounded-full bg-white/20" />
+            <span className="absolute left-[22%] top-5 h-1.5 w-1.5 rounded-full bg-white/70" />
           </div>
-          <div className="relative flex flex-col items-center pt-8 text-center">
-            <GradientAvatar seed={portrait.id} text={nickname} size="xl" className="ring-4 ring-card" />
-            <h2 className="mt-3 flex items-center gap-1.5 text-lg font-bold">{nickname}</h2>
-            <span className={`mt-1.5 inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-medium ${isPublicView ? 'bg-mint-soft text-mint' : 'bg-bg text-ink-sub'}`}>
-              <BadgeCheck size={12} />
+          <div className="relative flex flex-col items-center pt-10 text-center">
+            <GradientAvatar seed={portrait.id} text={nickname} size="xl" className="!h-24 !w-24 !text-3xl !shadow-card ring-4 ring-card" />
+            <h2 className="mt-3 flex items-center gap-1.5 text-xl font-bold tracking-tight">{nickname}</h2>
+            <span className={`mt-2 inline-flex min-h-7 items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold ${isPublicView ? 'bg-mint-soft text-[#218B70]' : 'bg-bg text-ink-sub'}`}>
+              <BadgeCheck size={13} />
               {isPublicView ? '已公开' : '未公开 · 定向可见'}
             </span>
           </div>
@@ -128,28 +166,31 @@ export default function PortraitDetailPage() {
         <div className="flex min-w-0 flex-col gap-4">
           {bio ? (
             <Card className="relative overflow-hidden">
-              <span aria-hidden className="absolute right-4 top-3 select-none text-5xl font-black text-primary/10">”</span>
-              <h3 className="mb-2 flex items-center gap-1.5 text-sm font-bold">
-                <Sparkles size={15} className="text-primary" /> 一句话介绍
+              <span aria-hidden className="absolute right-4 top-2 select-none text-6xl font-black text-primary/10">”</span>
+              <h3 className="relative mb-2.5 flex items-center gap-2 text-base font-bold">
+                <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary-soft text-primary"><Sparkles size={16} /></span>
+                一句话介绍
               </h3>
-              <p className="text-sm leading-relaxed text-ink">{bio}</p>
+              <p className="relative text-sm leading-7 text-ink">{bio}</p>
             </Card>
           ) : null}
 
           <Card>
-            <h3 className="mb-2.5 flex items-center gap-1.5 text-sm font-bold">
-              <MessageCircleHeart size={15} className="text-mint" /> 兴趣爱好
+            <h3 className="mb-3 flex items-center gap-2 text-base font-bold">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-mint-soft text-[#218B70]"><MessageCircleHeart size={16} /></span>
+              兴趣爱好
             </h3>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-2">
               {interestTags.map((t) => (
                 <Tag key={t} tone="mint">{t}</Tag>
               ))}
             </div>
-            <h3 className="mb-2.5 mt-5 flex items-center gap-1.5 text-sm font-bold">
-              <Heart size={15} className="text-pink" /> 社交意图
-              <span className="text-[11px] font-normal text-ink-sub">我希望在这里…</span>
+            <h3 className="mb-3 mt-5 flex items-center gap-2 text-base font-bold">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-pink-soft text-[#C65486]"><Heart size={16} /></span>
+              社交意图
+              <span className="text-xs font-normal text-ink-sub">我希望在这里…</span>
             </h3>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-2">
               {socialIntents.map((s) => (
                 <Tag key={s} tone="pink">{s}</Tag>
               ))}
@@ -220,7 +261,7 @@ function GreetingCard({ nickname, existingInvitation, canGreetNow, greetResult, 
   onGreet: () => void
 }) {
   return (
-    <Card className="border border-primary/15 bg-gradient-to-br from-primary-soft/70 to-card">
+    <Card className="relative overflow-hidden border border-primary/15 bg-gradient-to-br from-primary-soft/70 to-card">
       {existingInvitation ? (
         existingInvitation.status === 'accepted' && existingInvitation.conversationId ? (
           <div>

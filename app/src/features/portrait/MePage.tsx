@@ -2,6 +2,7 @@ import { EyeOff, PenLine, RotateCcw, Users } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { useData } from '@/data/DataProvider'
+import { readMigrationConflicts } from '@/data/migrations/b1Legacy'
 import { Button } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
 import { GradientAvatar, gradientFor } from '@/shared/ui/GradientAvatar'
@@ -17,25 +18,58 @@ export default function MePage() {
   const { state, myPortrait, withdrawPortrait, resetDemo, switchIdentity } = useData()
   const currentIdentity = state.identities.find((i) => i.id === state.currentUserId)
   const otherIdentities = state.identities.filter((i) => i.id !== state.currentUserId)
+  // B1/P0-04：历史重复 Portrait ID 冲突记录（歧义数据未自动迁移，保留恢复提示）
+  const migrationConflicts = readMigrationConflicts()
+  // B1/P0-01：旧公开资料缺少可信快照 → 提示本人重新预览并确认公开
+  const needsReconfirm = Boolean(myPortrait?.isPublic && !myPortrait.publicSnapshot)
 
   return (
     <div>
       <PageHeader title="我的" subtitle="自我表达、资料与社交边界。" />
 
+      {migrationConflicts.length > 0 ? (
+        <Card className="mb-4 border border-pink/40 bg-pink-soft/60">
+          <p className="text-sm font-bold">检测到历史数据冲突（未自动合并或删除）</p>
+          <p className="mt-1 text-xs leading-relaxed text-ink-sub">
+            发现 {migrationConflicts.length} 组归属存在歧义的历史 Portrait 记录，已原样保留；
+            原始数据备份在本浏览器中（tongpin-campus-v1-backup-b1），可人工核对恢复，或重置为初始合成样例。
+          </p>
+          <ul className="mt-1.5 list-inside list-disc text-[11px] text-ink-sub">
+            {migrationConflicts.map((c) => (
+              <li key={c.portraitId}>记录 {c.portraitId}：{c.reason}</li>
+            ))}
+          </ul>
+        </Card>
+      ) : null}
+
+      {needsReconfirm ? (
+        <Card className="mb-4 border border-primary/30 bg-primary-soft/40">
+          <p className="text-sm font-bold">你的公开资料需要重新确认公开</p>
+          <p className="mt-1 text-xs leading-relaxed text-ink-sub">
+            这份资料来自旧版本数据，缺少已确认的公开快照，已暂停在公共列表、星云与搜索中展示。
+            草稿与已有邀请、会话、报名关系均保留；请重新预览并明确确认公开后恢复。
+          </p>
+          <Link to="/me/portrait/preview" className="mt-2 inline-block">
+            <Button size="sm">去预览并确认公开</Button>
+          </Link>
+        </Card>
+      ) : null}
+
       {myPortrait ? (
         <Card className="relative mb-4 overflow-hidden !p-0">
-          <div className={`relative h-24 bg-gradient-to-br ${gradientFor(myPortrait.id)}`}>
-            <span className="absolute -left-6 -top-8 h-24 w-24 rounded-full bg-white/25 blur-2xl" />
-            <span className="absolute bottom-0 right-8 h-14 w-14 rounded-full bg-white/20 blur-xl" />
+          <div className={`relative h-28 bg-gradient-to-br ${gradientFor(myPortrait.id)}`}>
+            <span className="absolute -left-6 -top-10 h-28 w-28 rounded-full border-[14px] border-white/20" />
+            <span className="absolute bottom-0 right-10 h-16 w-16 rounded-full bg-white/15" />
+            <span className="absolute left-[26%] top-6 h-1.5 w-1.5 rounded-full bg-white/70" />
           </div>
           <div className="px-4 pb-4 md:px-5 md:pb-5">
-            <div className="-mt-10 flex items-end justify-between">
-              <GradientAvatar seed={myPortrait.id} text={myPortrait.nickname} size="xl" className="ring-4 ring-card" />
-              <Tag tone={myPortrait.isPublic ? 'mint' : 'neutral'}>{myPortrait.isPublic ? '已公开' : '未公开'}</Tag>
+            <div className="-mt-12 flex items-end justify-between gap-3">
+              <GradientAvatar seed={myPortrait.id} text={myPortrait.nickname} size="xl" className="!h-24 !w-24 !text-3xl !shadow-card ring-4 ring-card" />
+              <Tag tone={myPortrait.isPublic ? 'mint' : 'neutral'} className="mb-2">{myPortrait.isPublic ? '已公开' : '未公开'}</Tag>
             </div>
-            <h2 className="mt-3 text-lg font-bold">{myPortrait.nickname}</h2>
-            {myPortrait.bio ? <p className="mt-1.5 text-sm leading-relaxed text-ink-sub">{myPortrait.bio}</p> : null}
-            <div className="mt-3 flex flex-wrap gap-1.5">
+            <h2 className="mt-3 text-xl font-bold tracking-tight">{myPortrait.nickname}</h2>
+            {myPortrait.bio ? <p className="mt-1.5 text-sm leading-6 text-ink-sub">{myPortrait.bio}</p> : null}
+            <div className="mt-3 flex flex-wrap gap-2">
               {myPortrait.interestTags.map((t) => (
                 <Tag key={t} tone="mint">{t}</Tag>
               ))}
@@ -43,7 +77,7 @@ export default function MePage() {
                 <Tag key={s} tone="pink">{s}</Tag>
               ))}
             </div>
-            <p className="mt-3 text-[11px] leading-relaxed text-ink-sub">
+            <p className="mt-3 rounded-2xl bg-bg/70 px-3 py-2.5 text-[11px] leading-5 text-ink-sub">
               {myPortrait.isPublic
                 ? '当前状态：出现在公开找人列表与星云中，可以主动打招呼。'
                 : '当前状态：不出现在公开列表与星云，不能主动打招呼；仍可以凭基础 Portrait 向组织者展示并报名（DEC-002.4）。'}

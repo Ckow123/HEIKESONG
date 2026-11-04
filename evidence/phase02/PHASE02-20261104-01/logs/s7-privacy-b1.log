@@ -1,0 +1,28 @@
+PASS P04-1 两个无 Portrait 身份各自成功创建
+PASS P04-2 两份 Portrait ID 不同
+PASS P04-3 owner 绑定正确
+PASS P04-4 甲编辑后乙的记录未被覆盖
+PASS P04-5 甲的编辑正常生效
+PASS P04-6 刷新后双身份数据保持一致
+PASS P04-7 既有邀请/报名引用保持有效
+PASS P01a-1 无快照旧公开资料不出现在找同频的人
+PASS P01a-2 无快照旧公开资料不出现在星云
+PASS P01a-3 公共详情不展示未确认内容（无 bio）
+PASS P01a-4 公共详情给出待重新确认提示
+PASS P01b-1 未确认草稿昵称不进入公共列表
+PASS P01b-2 公共详情仍显示已确认版本 A
+PASS P01b-3 公共详情不显示草稿昵称 B
+PASS P02-1 申请者可见自己的报名状态
+PASS P02-2 申请者看不到其他报名者（一舟）
+PASS P02-3 无关访客看不到报名者一舟
+PASS P02-4 无关访客看不到报名者甲同学
+PASS P02-5 无关访客看不到报名记录名单
+PASS P02-6 组织者可见申请者记录
+PASS P02-7 组织者保留处理入口
+PASS P03-1 活动页不展示未确认草稿昵称 B
+PASS P03-2 活动页展示已确认昵称 A
+PASS P03-3 撤回公开后署名兜底为「活动发起人」
+PASS P03-4 撤回公开后不再展示任何昵称
+PASS P03-5 活动本身仍可访问
+done -> D:\WorkBuddy Datebase\HEIKESONG-PHASE02-VISUAL-20261104\evidence\phase02\PHASE02-20261104-01\after\privacy
+summary: 26/26 pass, 0 fail
