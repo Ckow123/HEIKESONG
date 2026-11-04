@@ -1,0 +1,28 @@
+PASS P04-1 两个无 Portrait 身份各自成功创建
+FAIL P04-2 两份 Portrait ID 不同 :: me.id=p-me, u-test2.id=p-me
+PASS P04-3 owner 绑定正确
+FAIL P04-4 甲编辑后乙的记录未被覆盖 :: u-test2 nickname=记录丢失
+PASS P04-5 甲的编辑正常生效
+FAIL P04-6 刷新后双身份数据保持一致 :: reload mismatch
+PASS P04-7 既有邀请/报名引用保持有效
+FAIL P01a-1 无快照旧公开资料不出现在找同频的人 :: nickname visible in people list
+FAIL P01a-2 无快照旧公开资料不出现在星云 :: nickname visible in nebula
+FAIL P01a-3 公共详情不展示未确认内容（无 bio） :: draft bio visible on public detail
+PASS P01a-4 公共详情给出待重新确认提示
+FAIL P01b-1 未确认草稿昵称不进入公共列表 :: draft nickname B in people list
+FAIL P01b-2 公共详情仍显示已确认版本 A :: h2=["林间风B"]
+FAIL P01b-3 公共详情不显示草稿昵称 B :: draft nickname B on detail
+PASS P02-1 申请者可见自己的报名状态
+FAIL P02-2 申请者看不到其他报名者（一舟） :: other enrollee visible to applicant
+FAIL P02-3 无关访客看不到报名者一舟 :: enrollee visible to stranger
+FAIL P02-4 无关访客看不到报名者甲同学 :: enrollee visible to stranger
+FAIL P02-5 无关访客看不到报名记录名单 :: enrollment list visible to stranger
+PASS P02-6 组织者可见申请者记录
+PASS P02-7 组织者保留处理入口
+FAIL P03-1 活动页不展示未确认草稿昵称 B :: draft nickname B shown as organizer
+PASS P03-2 活动页展示已确认昵称 A
+FAIL P03-3 撤回公开后署名兜底为「活动发起人」 :: no neutral fallback label
+FAIL P03-4 撤回公开后不再展示任何昵称 :: nickname still shown after withdraw
+PASS P03-5 活动本身仍可访问
+done -> D:\WorkBuddy Datebase\HEIKESONG-B1-isolated-20261103\evidence\b1\B1-20261103-01\before
+summary: 10/26 pass, 16 fail

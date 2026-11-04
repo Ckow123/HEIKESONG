@@ -1,0 +1,12 @@
+== before baseline @ 67716d6fea5dab1e665bca7607e1da293f5d9365 ==
+--- tsc -b ---
+tsc exit=0
+--- oxlint ---
+ 28 | 
+    `----
+
+Found 14 warnings and 0 errors.
+Finished in 27ms on 50 files with 116 rules using 32 threads.
+lint exit=0
+--- build ---
+build exit=0
