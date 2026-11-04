@@ -34,12 +34,14 @@ export default function ActivityDetailPage() {
   }
 
   const organizer = state.portraits.find((p) => p.ownerId === activity.organizerId)
+  // B1/P0-03（Gate B 决策 2）：发起人署名只取有效公开 Snapshot 的昵称；
+  // 无快照 / 已撤回 / 未授权时统一兜底为「活动发起人」，绝不读取草稿字段
+  const organizerPublicName = organizer?.isPublic && organizer.publicSnapshot ? organizer.publicSnapshot.nickname : null
   const allEnrollments = state.enrollments.filter((e) => e.activityId === activity.id)
   const enrollGatePassed = canEnroll(state.currentUserId)
   const isOrganizer = activity.organizerId === state.currentUserId
   const myEnrollment = myEnrollments.find((e) => e.activityId === activity.id)
   const organizerPending = pendingEnrollmentsForOrganizer.filter((e) => e.activityId === activity.id)
-  const nameOf = (id: string) => state.identities.find((x) => x.id === id)?.displayName ?? '合成用户'
 
   const statusLabel = (s: string) => {
     switch (s) {
@@ -103,13 +105,16 @@ export default function ActivityDetailPage() {
               <span className="inline-flex items-center gap-2 sm:col-span-2">
                 <Users size={15} className="text-mint" />
                 发起人：
-                {organizer ? (
+                {organizerPublicName ? (
                   <span className="inline-flex items-center gap-1.5">
-                    <GradientAvatar seed={organizer.id} text={organizer.nickname} size="sm" className="!h-6 !w-6 !text-[10px]" />
-                    {organizer.nickname}
+                    <GradientAvatar seed={organizer!.id} text={organizerPublicName} size="sm" className="!h-6 !w-6 !text-[10px]" />
+                    {organizerPublicName}
                   </span>
                 ) : (
-                  nameOf(activity.organizerId)
+                  <span className="inline-flex items-center gap-1.5 text-ink-sub">
+                    <GradientAvatar seed={activity.id} text="活动发起人" size="sm" className="!h-6 !w-6 !text-[10px]" />
+                    活动发起人
+                  </span>
                 )}
               </span>
             </div>
@@ -191,10 +196,11 @@ export default function ActivityDetailPage() {
           </Card>
         )}
 
-        {/* 已有报名记录 */}
-        {allEnrollments.length > 0 ? (
+        {/* 报名记录名单：B1/P0-02 仅组织者可见全部申请记录；
+            申请者在上方「报名申请」卡查看自己的状态；无关访客不展示任何可识别名单 */}
+        {isOrganizer && allEnrollments.length > 0 ? (
           <Card>
-            <h3 className="mb-2 text-sm font-bold">报名记录</h3>
+            <h3 className="mb-2 text-sm font-bold">报名记录（仅组织者可见）</h3>
             <p className="text-xs leading-relaxed text-ink-sub">
               共 {allEnrollments.length} 条报名记录。撤回公开不会自动取消已有报名（DEC-003.3）。
             </p>

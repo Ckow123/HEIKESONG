@@ -2,6 +2,7 @@ import { EyeOff, PenLine, RotateCcw, Users } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { useData } from '@/data/DataProvider'
+import { readMigrationConflicts } from '@/data/migrations/b1Legacy'
 import { Button } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
 import { GradientAvatar, gradientFor } from '@/shared/ui/GradientAvatar'
@@ -17,10 +18,42 @@ export default function MePage() {
   const { state, myPortrait, withdrawPortrait, resetDemo, switchIdentity } = useData()
   const currentIdentity = state.identities.find((i) => i.id === state.currentUserId)
   const otherIdentities = state.identities.filter((i) => i.id !== state.currentUserId)
+  // B1/P0-04：历史重复 Portrait ID 冲突记录（歧义数据未自动迁移，保留恢复提示）
+  const migrationConflicts = readMigrationConflicts()
+  // B1/P0-01：旧公开资料缺少可信快照 → 提示本人重新预览并确认公开
+  const needsReconfirm = Boolean(myPortrait?.isPublic && !myPortrait.publicSnapshot)
 
   return (
     <div>
       <PageHeader title="我的" subtitle="自我表达、资料与社交边界。" />
+
+      {migrationConflicts.length > 0 ? (
+        <Card className="mb-4 border border-pink/40 bg-pink-soft/60">
+          <p className="text-sm font-bold">检测到历史数据冲突（未自动合并或删除）</p>
+          <p className="mt-1 text-xs leading-relaxed text-ink-sub">
+            发现 {migrationConflicts.length} 组归属存在歧义的历史 Portrait 记录，已原样保留；
+            原始数据备份在本浏览器中（tongpin-campus-v1-backup-b1），可人工核对恢复，或重置为初始合成样例。
+          </p>
+          <ul className="mt-1.5 list-inside list-disc text-[11px] text-ink-sub">
+            {migrationConflicts.map((c) => (
+              <li key={c.portraitId}>记录 {c.portraitId}：{c.reason}</li>
+            ))}
+          </ul>
+        </Card>
+      ) : null}
+
+      {needsReconfirm ? (
+        <Card className="mb-4 border border-primary/30 bg-primary-soft/40">
+          <p className="text-sm font-bold">你的公开资料需要重新确认公开</p>
+          <p className="mt-1 text-xs leading-relaxed text-ink-sub">
+            这份资料来自旧版本数据，缺少已确认的公开快照，已暂停在公共列表、星云与搜索中展示。
+            草稿与已有邀请、会话、报名关系均保留；请重新预览并明确确认公开后恢复。
+          </p>
+          <Link to="/me/portrait/preview" className="mt-2 inline-block">
+            <Button size="sm">去预览并确认公开</Button>
+          </Link>
+        </Card>
+      ) : null}
 
       {myPortrait ? (
         <Card className="relative mb-4 overflow-hidden !p-0">

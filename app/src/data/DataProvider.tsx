@@ -5,6 +5,7 @@ import type { BasicPortraitView, Enrollment, EnrollmentStatus, InteractionAccess
 
 import { storageAdapter } from './adapters/storageAdapter'
 import type { DataAdapter } from './adapters/memoryAdapter'
+import { allocatePortraitId } from './migrations/b1Legacy'
 import type { DemoState } from './state'
 
 /** PR-3：校验 InteractionAccess 的 source 对应关系是否真实有效且方向正确 */
@@ -44,9 +45,9 @@ function isValidAccessSource(access: InteractionAccess, state: DemoState): boole
   }
 }
 
-/** PR-1：构建公共投影 Portrait（用 publicSnapshot 替换公共字段，隔离编辑草稿） */
-function toPublicPortrait(p: Portrait): Portrait {
-  if (!p.publicSnapshot) return p
+/** PR-1 + B1/P0-01：公共投影必须基于已确认的 publicSnapshot；无可信快照时返回 null（暂停公共展示，不回退草稿） */
+function toPublicPortrait(p: Portrait): Portrait | null {
+  if (!p.publicSnapshot) return null
   return {
     ...p,
     nickname: p.publicSnapshot.nickname,
@@ -68,7 +69,8 @@ interface DataContextValue {
   /** 星云投影：从公开资料实时派生，未公开/撤回用户自动消失 */
   nebulaProjections: NebulaProjection[]
   getPortraitById: (id: string) => Portrait | undefined
-  getPublicView: (portrait: Portrait) => PublicPortraitView
+  /** PR-1：获取公共视图；无可信快照时返回 undefined（B1/P0-01：不回退草稿字段） */
+  getPublicView: (portrait: Portrait) => PublicPortraitView | undefined
   /** PR-1：获取草稿视图（预览页面使用，看到的是编辑中的 B 版本而非已确认的 A） */
   getDraftView: (portrait: Portrait) => PublicPortraitView
   /** 撤回后，指定互动对方仍可查看基础 Portrait（DEC-003.4）；PR-3：校验 source 来源有效性 */
@@ -149,8 +151,12 @@ export function DataProvider({ children, adapter = storageAdapter }: { children:
 
   const value = useMemo<DataContextValue>(() => {
     const myPortrait = state.portraits.find((p) => p.ownerId === state.currentUserId)
-    // PR-1：公共投影使用 publicSnapshot 隔离编辑草稿；无 snapshot 时回退到当前字段（向后兼容旧数据）
-    const publicPortraits = state.portraits.filter((p) => p.isPublic).map(toPublicPortrait)
+    // PR-1 + B1/P0-01：公共投影仅包含 isPublic 且具可信 publicSnapshot 的资料；
+    // 旧 localStorage 中无快照的公开记录暂停进入公共列表/星云/搜索/详情
+    const publicPortraits = state.portraits
+      .filter((p) => p.isPublic)
+      .map(toPublicPortrait)
+      .filter((p): p is Portrait => p !== null)
 
     // 演示排布：按公开列表顺序确定性散布，不引入聚类/匹配算法（未冻结）
     const nebulaProjections: NebulaProjection[] = publicPortraits.map((p, i) => {
@@ -179,12 +185,13 @@ export function DataProvider({ children, adapter = storageAdapter }: { children:
       publicPortraits,
       nebulaProjections,
       getPortraitById: (id) => state.portraits.find((p) => p.id === id),
-      getPublicView: (portrait) => portrait.publicSnapshot ?? toPublicView(portrait),
+      getPublicView: (portrait) => portrait.publicSnapshot,
       getDraftView: toPublicView,
       canViewBasicPortrait: (viewerId, portraitId) => {
         const target = state.portraits.find((p) => p.id === portraitId)
         if (!target) return false
-        if (target.isPublic) return true
+        // B1/P0-01：公开但无可信快照的资料暂停公共可见
+        if (target.isPublic && target.publicSnapshot) return true
         if (target.ownerId === viewerId) return true
         // PR-3：不仅检查 ACL 存在，还校验 source 对应关系有效且方向正确
         return state.interactionAccess.some((a) => {
@@ -194,7 +201,8 @@ export function DataProvider({ children, adapter = storageAdapter }: { children:
       },
       canGreet: (identityId) => {
         const p = state.portraits.find((x) => x.ownerId === identityId)
-        return isBasicComplete(p) && p.isPublic
+        // B1/P0-01：公开但无可信快照时暂停主动打招呼，待本人重新确认
+        return isBasicComplete(p) && p.isPublic && Boolean(p.publicSnapshot)
       },
       canEnroll: (identityId) => isBasicComplete(state.portraits.find((x) => x.ownerId === identityId)),
       acceptInvitation: (invitationId) => {
@@ -244,11 +252,11 @@ export function DataProvider({ children, adapter = storageAdapter }: { children:
         if (!target) return { success: false, reason: 'not_found' as const }
         // 禁止给自己打招呼
         if (target.ownerId === state.currentUserId) return { success: false, reason: 'self' as const }
-        // Q2：发送方必须已公开（canGreet）
+        // Q2：发送方必须已公开且具可信快照（canGreet / B1 P0-01）
         const myP = state.portraits.find((p) => p.ownerId === state.currentUserId)
-        if (!isBasicComplete(myP) || !myP.isPublic) return { success: false, reason: 'not_public' as const }
-        // Q2：目标必须已公开
-        if (!target.isPublic) return { success: false, reason: 'not_public' as const }
+        if (!isBasicComplete(myP) || !myP.isPublic || !myP.publicSnapshot) return { success: false, reason: 'not_public' as const }
+        // Q2：目标必须已公开且具可信快照（B1/P0-01）
+        if (!target.isPublic || !target.publicSnapshot) return { success: false, reason: 'not_public' as const }
 
         const targetUserId = target.ownerId
         // 检查同方向已有邀请
@@ -376,7 +384,8 @@ export function DataProvider({ children, adapter = storageAdapter }: { children:
       savePortrait: (draft, options) => {
         const existing = state.portraits.find((p) => p.ownerId === state.currentUserId)
         const next: Portrait = {
-          id: existing?.id ?? 'p-me',
+          // B1 / P0-04：新建生成唯一稳定 ID（不再固定 'p-me'）；更新沿用原 ID
+          id: existing?.id ?? allocatePortraitId(state, state.currentUserId),
           ownerId: state.currentUserId,
           nickname: draft.nickname.trim(),
           interestTags: draft.interestTags,
@@ -392,7 +401,10 @@ export function DataProvider({ children, adapter = storageAdapter }: { children:
         }
         persist({
           ...state,
-          portraits: existing ? state.portraits.map((p) => (p.id === existing.id ? next : p)) : [...state.portraits, next],
+          // B1 / P0-04：更新必须同时匹配 Portrait ID 与 ownerId，禁止跨身份覆盖
+          portraits: existing
+            ? state.portraits.map((p) => (p.id === existing.id && p.ownerId === state.currentUserId ? next : p))
+            : [...state.portraits, next],
         })
       },
       publishPortrait: () => {
@@ -403,7 +415,10 @@ export function DataProvider({ children, adapter = storageAdapter }: { children:
         persist({
           ...state,
           portraits: state.portraits.map((p) =>
-            p.id === existing.id ? { ...p, isPublic: true, publicSnapshot: snapshot, updatedAt: new Date().toISOString() } : p,
+            // B1 / P0-04：同时校验 ID 与 ownerId
+            p.id === existing.id && p.ownerId === state.currentUserId
+              ? { ...p, isPublic: true, publicSnapshot: snapshot, updatedAt: new Date().toISOString() }
+              : p,
           ),
         })
       },
@@ -413,7 +428,12 @@ export function DataProvider({ children, adapter = storageAdapter }: { children:
         // 仅改变公开标记；邀请、会话、报名与定向授权均不删除（DEC-003.3/4）
         persist({
           ...state,
-          portraits: state.portraits.map((p) => (p.id === existing.id ? { ...p, isPublic: false, updatedAt: new Date().toISOString() } : p)),
+          // B1 / P0-04：同时校验 ID 与 ownerId
+          portraits: state.portraits.map((p) =>
+            p.id === existing.id && p.ownerId === state.currentUserId
+              ? { ...p, isPublic: false, updatedAt: new Date().toISOString() }
+              : p,
+          ),
         })
       },
       resetDemo: () => {

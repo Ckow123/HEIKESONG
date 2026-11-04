@@ -35,12 +35,34 @@ export default function PortraitDetailPage() {
 
   const viewerId = state.currentUserId
   const isSelf = portrait.ownerId === viewerId
-  const isPublicView = portrait.isPublic
+  // B1/P0-01：公开且具可信快照才算公共可见；公开但无快照 = 暂停展示，等待本人重新确认
+  const hasTrustedSnapshot = Boolean(portrait.publicSnapshot)
+  const isPublicView = portrait.isPublic && hasTrustedSnapshot
   // Q2：检查同方向已有邀请
   const existingInvitation = state.invitations.find(
     (i) => i.fromId === viewerId && i.toId === portrait.ownerId,
   )
   const allowed = isPublicView || canViewBasicPortrait(viewerId, portrait.id)
+
+  // B1/P0-01：旧公开资料缺少可信快照 → 对他人暂停展示，提示等待本人重新确认公开
+  if (portrait.isPublic && !hasTrustedSnapshot && !isSelf) {
+    return (
+      <div>
+        <PageHeader title="Portrait 详情" />
+        <Card className="flex flex-col items-center gap-3 py-10 text-center">
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-soft">
+            <ShieldCheck size={26} className="text-primary" />
+          </span>
+          <div>
+            <p className="text-sm font-bold">这份 Portrait 等待本人重新确认公开</p>
+            <p className="mx-auto mt-1 max-w-sm text-xs leading-relaxed text-ink-sub">
+              对方此前公开过资料，但需要本人重新预览并明确确认公开后才会恢复展示；草稿内容不会在确认前公开。
+            </p>
+          </div>
+        </Card>
+      </div>
+    )
+  }
 
   if (!allowed) {
     return (
@@ -71,6 +93,8 @@ export default function PortraitDetailPage() {
   const zodiac = publicView?.zodiac
   const relationshipStatus = publicView?.relationshipStatus
   const bio = publicView?.bio
+  // B1/P0-01：本人查看自己被暂停公开的资料时给出重新确认提示
+  const selfNeedsReconfirm = isSelf && portrait.isPublic && !hasTrustedSnapshot
 
   return (
     <div>
@@ -78,6 +102,19 @@ export default function PortraitDetailPage() {
         title={`${nickname} 的 Portrait`}
         subtitle={isPublicView ? '已公开 · 内容以对方确认公开的范围为准' : '未公开 · 你因已有互动关系可查看基础信息（仅昵称 / 兴趣 / 社交意图）'}
       />
+
+      {selfNeedsReconfirm ? (
+        <Card className="mb-4 border border-primary/30 bg-primary-soft/40">
+          <p className="text-sm font-medium">你的公开资料需要重新确认公开</p>
+          <p className="mt-1 text-xs leading-relaxed text-ink-sub">
+            这份资料来自旧版本数据，缺少已确认的公开快照，已暂停在公共列表、星云与搜索中展示。
+            请重新预览并明确确认公开后恢复；草稿与已有邀请、会话、报名关系均保留。
+          </p>
+          <Link to="/me/portrait/preview" className="mt-2 inline-block">
+            <Button size="sm">去预览并确认公开</Button>
+          </Link>
+        </Card>
+      ) : null}
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[280px_minmax(0,1fr)_300px]">
         {/* 左侧资料栏 */}
