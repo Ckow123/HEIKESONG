@@ -1,4 +1,4 @@
-import { BookOpen, CalendarCheck, Dumbbell, Languages, MapPin, Trophy, Users } from 'lucide-react'
+import { ArrowUpRight, BookOpen, CalendarCheck, Dumbbell, Languages, MapPin, Trophy, Users } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
@@ -29,37 +29,40 @@ function themeFor(a: Activity): ActivityTheme {
 }
 
 /** 校园活动卡片：渐变封面 + 类别 badge + 标题/描述 + 时间/地点/人数元数据 + CTA。 */
-export function ActivityCard({ activity: a }: { activity: Activity }) {
+export function ActivityCard({ activity: a, horizontal = false }: { activity: Activity; horizontal?: boolean }) {
   const t = themeFor(a)
   return (
-    <article className="flex h-full flex-col overflow-hidden rounded-card bg-card shadow-card transition-shadow hover:shadow-lg">
-      <div className={`relative flex h-24 items-center justify-center bg-gradient-to-br md:h-28 ${t.cover}`}>
-        <span className="absolute -left-5 -top-7 h-20 w-20 rounded-full bg-white/40" aria-hidden />
-        <span className="absolute bottom-2 right-4 h-8 w-8 rounded-full bg-white/30" aria-hidden />
-        <t.Icon size={40} className={`${t.ink} opacity-80`} aria-hidden />
-        <span className={`absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${t.chip}`}>
+    <article className={`group h-full overflow-hidden rounded-card border border-white/90 bg-card shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover ${horizontal ? 'sm:grid sm:grid-cols-[164px_minmax(0,1fr)]' : 'flex flex-col'}`}>
+      <div className={`relative flex items-center justify-center overflow-hidden bg-gradient-to-br ${t.cover} ${horizontal ? 'h-28 sm:h-full sm:min-h-[252px]' : 'h-24 md:h-28'}`}>
+        <span className="absolute -left-7 -top-9 h-28 w-28 rounded-full border-[14px] border-white/25" aria-hidden />
+        <span className="absolute -bottom-8 -right-5 h-24 w-24 rounded-full bg-white/25" aria-hidden />
+        <span className="absolute bottom-4 left-5 h-2 w-2 rounded-full bg-white/70" aria-hidden />
+        <span className="flex h-16 w-16 items-center justify-center rounded-[22px] border border-white/40 bg-white/35 shadow-sm">
+          <t.Icon size={34} className={`${t.ink} opacity-90`} aria-hidden />
+        </span>
+        <span className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-semibold shadow-sm ${t.chip}`}>
           {a.interestCategory}
         </span>
       </div>
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <h3 className="font-semibold leading-snug">{a.title}</h3>
-        <p className="line-clamp-2 text-xs leading-relaxed text-ink-sub">{a.description}</p>
-        <div className="flex flex-col gap-1 text-xs text-ink-sub">
-          <span className="inline-flex items-center gap-1.5">
-            <CalendarCheck size={13} className="text-mint" /> {a.timeText}
+      <div className="flex min-w-0 flex-1 flex-col p-4">
+        <h3 className="text-[15px] font-bold leading-6 tracking-tight text-ink">{a.title}</h3>
+        <p className="mt-1.5 line-clamp-2 text-xs leading-5 text-ink-sub">{a.description}</p>
+        <div className="mt-3 flex flex-col gap-1.5 text-xs text-ink-sub">
+          <span className="inline-flex items-start gap-1.5">
+            <CalendarCheck size={14} className="mt-0.5 shrink-0 text-[#27997C]" /> <span className="leading-5">{a.timeText}</span>
           </span>
-          <span className="inline-flex items-center gap-1.5">
-            <MapPin size={13} className="text-pink" /> {a.locationText}
+          <span className="inline-flex items-start gap-1.5">
+            <MapPin size={14} className="mt-0.5 shrink-0 text-[#D46A98]" /> <span className="leading-5">{a.locationText}</span>
           </span>
           {a.capacityText ? (
             <span className="inline-flex items-center gap-1.5">
-              <Users size={13} className="text-primary" /> {a.capacityText}
+              <Users size={14} className="shrink-0 text-primary" /> {a.capacityText}
             </span>
           ) : null}
         </div>
-        <div className="mt-auto flex justify-end border-t border-bg pt-2">
-          <Link to={`/activities/${a.id}`} className="text-xs font-medium text-primary hover:underline">
-            查看详情 →
+        <div className="mt-auto flex justify-end border-t border-ink-sub/10 pt-1.5">
+          <Link to={`/activities/${a.id}`} className="-mr-2 inline-flex min-h-10 items-center gap-1 rounded-full px-2 text-xs font-semibold text-primary transition-colors hover:bg-primary-soft">
+            查看详情 <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
         </div>
       </div>

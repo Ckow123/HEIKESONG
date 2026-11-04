@@ -33,7 +33,7 @@ export function GradientAvatar({ seed, text, size = 'md', className = '' }: {
   return (
     <div
       aria-hidden
-      className={`relative flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br font-bold text-white shadow-sm ${gradientFor(seed)} ${sizeClass} ${className}`}
+      className={`relative flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br font-bold tracking-wide text-white shadow-sm ring-1 ring-white/25 ${gradientFor(seed)} ${sizeClass} ${className}`}
     >
       <span className="pointer-events-none absolute -left-2 -top-3 h-1/2 w-2/3 rounded-full bg-white/25 blur-md" />
       <span className="relative">{text.slice(0, 1)}</span>

@@ -119,15 +119,16 @@ export default function PortraitDetailPage() {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[280px_minmax(0,1fr)_300px]">
         {/* 左侧资料栏 */}
         <Card className="relative overflow-hidden lg:self-start">
-          <div className={`absolute inset-x-0 top-0 h-20 bg-gradient-to-br opacity-90 ${gradientFor(portrait.id)}`}>
-            <span className="absolute -left-4 -top-6 h-16 w-16 rounded-full bg-white/25 blur-xl" />
-            <span className="absolute -right-3 bottom-0 h-12 w-12 rounded-full bg-white/20 blur-lg" />
+          <div className={`absolute inset-x-0 top-0 h-24 bg-gradient-to-br opacity-95 ${gradientFor(portrait.id)}`}>
+            <span className="absolute -left-5 -top-8 h-24 w-24 rounded-full border-[12px] border-white/25" />
+            <span className="absolute -right-4 bottom-0 h-14 w-14 rounded-full bg-white/20" />
+            <span className="absolute left-[22%] top-5 h-1.5 w-1.5 rounded-full bg-white/70" />
           </div>
-          <div className="relative flex flex-col items-center pt-8 text-center">
-            <GradientAvatar seed={portrait.id} text={nickname} size="xl" className="ring-4 ring-card" />
-            <h2 className="mt-3 flex items-center gap-1.5 text-lg font-bold">{nickname}</h2>
-            <span className={`mt-1.5 inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-medium ${isPublicView ? 'bg-mint-soft text-mint' : 'bg-bg text-ink-sub'}`}>
-              <BadgeCheck size={12} />
+          <div className="relative flex flex-col items-center pt-10 text-center">
+            <GradientAvatar seed={portrait.id} text={nickname} size="xl" className="!h-24 !w-24 !text-3xl !shadow-card ring-4 ring-card" />
+            <h2 className="mt-3 flex items-center gap-1.5 text-xl font-bold tracking-tight">{nickname}</h2>
+            <span className={`mt-2 inline-flex min-h-7 items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold ${isPublicView ? 'bg-mint-soft text-[#218B70]' : 'bg-bg text-ink-sub'}`}>
+              <BadgeCheck size={13} />
               {isPublicView ? '已公开' : '未公开 · 定向可见'}
             </span>
           </div>
@@ -165,28 +166,31 @@ export default function PortraitDetailPage() {
         <div className="flex min-w-0 flex-col gap-4">
           {bio ? (
             <Card className="relative overflow-hidden">
-              <span aria-hidden className="absolute right-4 top-3 select-none text-5xl font-black text-primary/10">”</span>
-              <h3 className="mb-2 flex items-center gap-1.5 text-sm font-bold">
-                <Sparkles size={15} className="text-primary" /> 一句话介绍
+              <span aria-hidden className="absolute right-4 top-2 select-none text-6xl font-black text-primary/10">”</span>
+              <h3 className="relative mb-2.5 flex items-center gap-2 text-base font-bold">
+                <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary-soft text-primary"><Sparkles size={16} /></span>
+                一句话介绍
               </h3>
-              <p className="text-sm leading-relaxed text-ink">{bio}</p>
+              <p className="relative text-sm leading-7 text-ink">{bio}</p>
             </Card>
           ) : null}
 
           <Card>
-            <h3 className="mb-2.5 flex items-center gap-1.5 text-sm font-bold">
-              <MessageCircleHeart size={15} className="text-mint" /> 兴趣爱好
+            <h3 className="mb-3 flex items-center gap-2 text-base font-bold">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-mint-soft text-[#218B70]"><MessageCircleHeart size={16} /></span>
+              兴趣爱好
             </h3>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-2">
               {interestTags.map((t) => (
                 <Tag key={t} tone="mint">{t}</Tag>
               ))}
             </div>
-            <h3 className="mb-2.5 mt-5 flex items-center gap-1.5 text-sm font-bold">
-              <Heart size={15} className="text-pink" /> 社交意图
-              <span className="text-[11px] font-normal text-ink-sub">我希望在这里…</span>
+            <h3 className="mb-3 mt-5 flex items-center gap-2 text-base font-bold">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-pink-soft text-[#C65486]"><Heart size={16} /></span>
+              社交意图
+              <span className="text-xs font-normal text-ink-sub">我希望在这里…</span>
             </h3>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-2">
               {socialIntents.map((s) => (
                 <Tag key={s} tone="pink">{s}</Tag>
               ))}
@@ -257,7 +261,7 @@ function GreetingCard({ nickname, existingInvitation, canGreetNow, greetResult, 
   onGreet: () => void
 }) {
   return (
-    <Card className="border border-primary/15 bg-gradient-to-br from-primary-soft/70 to-card">
+    <Card className="relative overflow-hidden border border-primary/15 bg-gradient-to-br from-primary-soft/70 to-card">
       {existingInvitation ? (
         existingInvitation.status === 'accepted' && existingInvitation.conversationId ? (
           <div>

@@ -25,26 +25,27 @@ export default function SquarePage() {
   return (
     <div>
       <PageHeader title="校园广场" subtitle="校园里的多元交流社区：分享、发现与互相帮助。" />
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
         {SQUARE_CATEGORIES.map((c) => {
           const { Icon, card, ink } = CATEGORY_STYLE[c.key]
           return (
             <section
               key={c.key}
-              className={`relative flex h-full flex-col gap-2.5 overflow-hidden rounded-card bg-gradient-to-br p-4 shadow-card md:p-5 ${card}`}
+              className={`relative flex min-h-[168px] flex-col gap-2.5 overflow-hidden rounded-card border border-white/90 bg-gradient-to-br p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover md:p-5 ${card}`}
             >
-              <span className="pointer-events-none absolute -right-6 -top-8 h-24 w-24 rounded-full bg-white/45" aria-hidden />
+              <Icon className="pointer-events-none absolute -bottom-6 -right-5 h-24 w-24 opacity-[.09] md:h-32 md:w-32" aria-hidden />
+              <span className="pointer-events-none absolute -right-5 -top-7 h-20 w-20 rounded-full border-[12px] border-white/30" aria-hidden />
               <div className="relative flex items-center justify-between">
-                <span className={`inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-white/85 shadow-sm ${ink}`}>
-                  <Icon size={20} />
+                <span className={`inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-white/90 shadow-sm ${ink}`}>
+                  <Icon size={22} />
                 </span>
-                <span className="rounded-full bg-white/70 px-2 py-0.5 text-[10px] font-semibold text-ink-sub">
+                <span className="rounded-full bg-white/80 px-2.5 py-1 text-[10px] font-semibold text-ink-sub shadow-sm">
                   待实现
                 </span>
               </div>
-              <h2 className="relative font-bold">{c.label}</h2>
-              <p className="relative text-xs leading-relaxed text-ink-sub">{c.description}</p>
-              <span className={`relative mt-auto text-[11px] font-semibold ${ink}`}>规划中 · 蓝图阶段</span>
+              <h2 className="relative text-[15px] font-bold tracking-tight md:text-base">{c.label}</h2>
+              <p className="relative text-xs leading-5 text-ink-sub">{c.description}</p>
+              <span className={`relative mt-auto inline-flex min-h-7 items-center text-[11px] font-semibold ${ink}`}>规划中 · 蓝图阶段</span>
             </section>
           )
         })}

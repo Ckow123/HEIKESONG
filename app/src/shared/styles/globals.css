@@ -9,5 +9,40 @@ body,
 }
 
 body {
-  @apply bg-bg font-sans text-ink antialiased;
+  @apply m-0 min-w-[320px] bg-bg font-sans text-ink antialiased;
+  background-image: radial-gradient(circle at 8% 0%, rgba(108, 92, 231, 0.035), transparent 26rem);
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45 focus-visible:ring-offset-2 focus-visible:ring-offset-bg;
+}
+
+input,
+textarea,
+select {
+  @apply focus-visible:outline-none;
+}
+
+::selection {
+  @apply bg-primary/20 text-ink;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

@@ -13,8 +13,10 @@ export default {
       },
       borderRadius: { card: '18px' },
       boxShadow: {
-        card: '0 4px 16px rgba(108,92,231,0.08)',
-        nav: '0 -2px 12px rgba(45,42,62,0.06)',
+        card: '0 6px 24px rgba(45,42,62,0.055), 0 1px 3px rgba(108,92,231,0.04)',
+        'card-hover': '0 14px 36px rgba(45,42,62,0.09), 0 3px 10px rgba(108,92,231,0.06)',
+        nav: '0 -6px 24px rgba(45,42,62,0.07)',
+        button: '0 6px 16px rgba(108,92,231,0.20)',
       },
       fontFamily: {
         sans: ['"PingFang SC"', '"Microsoft YaHei"', '"Noto Sans SC"', 'system-ui', 'sans-serif'],

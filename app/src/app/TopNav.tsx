@@ -11,8 +11,8 @@ export function TopNav() {
   const currentIdentity = state.identities.find((i) => i.id === state.currentUserId)
 
   return (
-    <header className="sticky top-0 z-40 hidden border-b border-ink-sub/10 bg-card/90 backdrop-blur md:block">
-      <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
+    <header className="sticky top-0 z-40 hidden border-b border-ink-sub/10 bg-card/95 shadow-[0_2px_16px_rgba(45,42,62,0.035)] backdrop-blur-md md:block">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-6">
         <NavLink to="/discover" className="flex items-center gap-2 font-bold text-ink">
           <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-[#9D8CF5] text-white">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden>

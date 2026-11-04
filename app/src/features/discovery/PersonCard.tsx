@@ -1,6 +1,8 @@
+import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import type { Portrait } from '@/domain'
+import { GradientAvatar } from '@/shared/ui/GradientAvatar'
 import { Tag } from '@/shared/ui/Tag'
 
 /** 合成插画风封面色板：按 id 哈希确定性取色，避免真人照片（合成演示数据） */
@@ -32,59 +34,59 @@ export function PersonCard({ portrait: p }: { portrait: Portrait }) {
   const theme = coverFor(p.id)
   const rel = relationshipLabel(p)
   return (
-    <article className="flex h-full flex-col overflow-hidden rounded-card bg-card shadow-card transition-shadow hover:shadow-lg">
-      {/* 合成插画封面：柔和渐变 + 几何装饰 + 首字头像 */}
-      <div className={`relative h-20 bg-gradient-to-br md:h-24 ${theme.cover}`}>
-        <span className="absolute -right-4 -top-6 h-16 w-16 rounded-full bg-white/40" aria-hidden />
-        <span className="absolute bottom-2 right-8 h-6 w-6 rounded-full bg-white/30" aria-hidden />
+    <article className="group flex h-full min-w-0 flex-col overflow-hidden rounded-card border border-white/90 bg-card shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover">
+      <div className={`relative h-[86px] overflow-hidden bg-gradient-to-br md:h-24 ${theme.cover}`}>
+        <span className="absolute -right-5 -top-8 h-24 w-24 rounded-full border-[12px] border-white/25" aria-hidden />
+        <span className="absolute bottom-3 right-10 h-7 w-7 rounded-full bg-white/25" aria-hidden />
+        <span className="absolute left-[58%] top-4 h-1.5 w-1.5 rounded-full bg-white/70" aria-hidden />
         {p.mbti ? (
-          <span className="absolute right-3 top-3 rounded-full bg-white/75 px-2 py-0.5 text-[10px] font-semibold text-ink">
+          <span className="absolute right-3 top-3 rounded-full border border-white/60 bg-white/80 px-2.5 py-1 text-[10px] font-semibold tracking-wide text-ink shadow-sm">
             {p.mbti}
           </span>
         ) : null}
-        <span
-          className={`absolute -bottom-5 left-3 inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-base font-bold shadow-card md:left-4 md:h-12 md:w-12 ${theme.ink}`}
-          aria-hidden
-        >
-          {p.nickname.slice(0, 1)}
-        </span>
+        <GradientAvatar
+          seed={p.id}
+          text={p.nickname}
+          size="md"
+          className="absolute -bottom-5 left-3 !h-12 !w-12 !border-2 !border-white !text-lg !shadow-card md:left-4 md:!h-14 md:!w-14"
+        />
       </div>
 
-      <div className="flex flex-1 flex-col gap-2 px-3 pb-3 pt-7 md:px-4 md:pb-4">
-        <div className="flex items-baseline justify-between gap-2">
-          <span className="truncate font-semibold">{p.nickname}</span>
+      <div className="flex flex-1 flex-col px-3 pb-2 pt-7 md:px-4 md:pt-8">
+        <div className="flex items-center justify-between gap-2">
+          <span className={`truncate text-[15px] font-bold tracking-tight ${theme.ink}`}>{p.nickname}</span>
           {p.zodiac ? <span className="shrink-0 text-[11px] text-ink-sub">{p.zodiac}</span> : null}
         </div>
         {p.bio ? (
-          <p className="line-clamp-2 text-xs leading-relaxed text-ink-sub">{p.bio}</p>
+          <p className="mt-2 line-clamp-2 min-h-10 text-xs leading-5 text-ink-sub">{p.bio}</p>
         ) : null}
-        <div className="flex flex-wrap gap-1.5">
+        <div className="mt-3 flex flex-wrap gap-1.5">
           {p.interestTags.slice(0, 3).map((tag) => (
-            <Tag key={tag} tone="mint">
+            <Tag key={tag} tone="mint" className="!px-2 !text-[11px]">
               {tag}
             </Tag>
           ))}
         </div>
         {p.socialIntents.length > 0 ? (
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[11px] text-ink-sub/80">想找</span>
-            {p.socialIntents.slice(0, 2).map((intent) => (
-              <Tag key={intent} tone="pink">
+          <div className="mt-2 flex flex-wrap items-center gap-1.5">
+            <span className="text-[11px] text-ink-sub">想找</span>
+            {p.socialIntents.slice(0, 1).map((intent) => (
+              <Tag key={intent} tone="pink" className="!px-2 !text-[11px]">
                 {intent}
               </Tag>
             ))}
           </div>
         ) : null}
-        <div className="mt-auto flex items-center justify-between border-t border-bg pt-2">
-          <span className="text-[11px] text-ink-sub">
+        <div className="mt-auto flex items-center justify-between gap-2 border-t border-ink-sub/10 pt-1.5">
+          <span className="truncate text-[10px] text-ink-sub">
             {rel ? (
-              <span className={p.relationshipStatus === 'in_relationship' ? 'text-pink' : ''}>{rel}</span>
+              <span className={p.relationshipStatus === 'in_relationship' ? 'text-[#C65486]' : ''}>{rel}</span>
             ) : (
               '公开 Portrait'
             )}
           </span>
-          <Link to={`/people/${p.id}`} className="text-xs font-medium text-primary hover:underline">
-            查看 Portrait →
+          <Link to={`/people/${p.id}`} className="-mr-2 inline-flex min-h-10 shrink-0 items-center gap-0.5 rounded-full px-2 text-[11px] font-semibold text-primary transition-colors hover:bg-primary-soft">
+            查看 Portrait <ArrowUpRight size={13} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
         </div>
       </div>

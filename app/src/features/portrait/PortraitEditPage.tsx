@@ -87,7 +87,7 @@ export default function PortraitEditPage() {
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
             placeholder="同学将看到的名字（请勿使用真实姓名）"
-            className="w-full rounded-card border border-ink-sub/20 bg-bg px-3 py-2 text-sm outline-none focus:border-primary"
+            className="w-full min-h-11 rounded-card border border-ink-sub/20 bg-bg px-3 py-2.5 text-sm outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
         </Card>
 
@@ -98,7 +98,7 @@ export default function PortraitEditPage() {
           </p>
           <div className="flex flex-wrap gap-1.5">
             {INTEREST_OPTIONS.map((t) => (
-              <button key={t} type="button" onClick={() => toggle(interests, setInterests, t)}>
+              <button key={t} type="button" onClick={() => toggle(interests, setInterests, t)} className="min-h-9 inline-flex items-center rounded-full transition-transform active:scale-95">
                 <Tag tone={interests.includes(t) ? 'mint' : 'neutral'}>{t}</Tag>
               </button>
             ))}
@@ -112,7 +112,7 @@ export default function PortraitEditPage() {
           </p>
           <div className="flex flex-wrap gap-1.5">
             {INTENT_OPTIONS.map((s) => (
-              <button key={s} type="button" onClick={() => toggle(intents, setIntents, s)}>
+              <button key={s} type="button" onClick={() => toggle(intents, setIntents, s)} className="min-h-9 inline-flex items-center rounded-full transition-transform active:scale-95">
                 <Tag tone={intents.includes(s) ? 'pink' : 'neutral'}>{s}</Tag>
               </button>
             ))}
@@ -129,7 +129,7 @@ export default function PortraitEditPage() {
             onChange={(e) => setBio(e.target.value)}
             rows={3}
             placeholder="用一两句话介绍你的兴趣、状态或期待"
-            className="w-full rounded-card border border-ink-sub/20 bg-bg px-3 py-2 text-sm outline-none focus:border-primary"
+            className="w-full min-h-11 rounded-card border border-ink-sub/20 bg-bg px-3 py-2.5 text-sm outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
           <p className="mt-1 text-[11px] text-ink-sub">保存前经过基本内容过滤（有限词表初筛，不等于完整审核）。</p>
         </Card>
@@ -144,7 +144,7 @@ export default function PortraitEditPage() {
                 id="mbti"
                 value={mbti}
                 onChange={(e) => setMbti(e.target.value)}
-                className="w-full rounded-card border border-ink-sub/20 bg-bg px-3 py-2 text-sm outline-none focus:border-primary"
+                className="w-full min-h-11 rounded-card border border-ink-sub/20 bg-bg px-3 py-2.5 text-sm outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20"
               >
                 <option value="">不填写</option>
                 {MBTI_OPTIONS.map((m) => (
@@ -160,7 +160,7 @@ export default function PortraitEditPage() {
                 id="zodiac"
                 value={zodiac}
                 onChange={(e) => setZodiac(e.target.value)}
-                className="w-full rounded-card border border-ink-sub/20 bg-bg px-3 py-2 text-sm outline-none focus:border-primary"
+                className="w-full min-h-11 rounded-card border border-ink-sub/20 bg-bg px-3 py-2.5 text-sm outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20"
               >
                 <option value="">不填写</option>
                 {ZODIAC_OPTIONS.map((z) => (
@@ -177,7 +177,7 @@ export default function PortraitEditPage() {
               id="relationship"
               value={relationship}
               onChange={(e) => setRelationship(e.target.value as RelationshipStatus)}
-              className="w-full rounded-card border border-ink-sub/20 bg-bg px-3 py-2 text-sm outline-none focus:border-primary"
+              className="w-full min-h-11 rounded-card border border-ink-sub/20 bg-bg px-3 py-2.5 text-sm outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20"
             >
               <option value="undisclosed">不公开</option>
               <option value="in_relationship">有对象</option>

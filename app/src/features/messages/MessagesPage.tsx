@@ -33,8 +33,9 @@ export default function MessagesPage() {
 
       {/* 待处理邀请 */}
       <section className="mb-6">
-        <h2 className="mb-2.5 flex items-center gap-2 font-bold">
-          <Clock size={16} className="text-pink" /> 待处理邀请
+        <h2 className="mb-3 flex items-center gap-2 text-base font-bold">
+          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-pink-soft text-[#C65486]"><Clock size={16} /></span>
+          待处理邀请
           <Tag tone="pink">{pending.length}</Tag>
         </h2>
         {pending.length === 0 ? (
@@ -49,9 +50,9 @@ export default function MessagesPage() {
               const displayName = snapshot?.nickname ?? nameOf(inv.fromId)
               const avatarSeed = snapshot?.portraitId ?? senderPortrait?.id ?? inv.fromId
               return (
-              <Card key={inv.id} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <Card key={inv.id} className="flex flex-col gap-3 border-primary/10 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex min-w-0 items-start gap-3">
-                  <GradientAvatar seed={avatarSeed} text={displayName} size="md" />
+                  <GradientAvatar seed={avatarSeed} text={displayName} size="md" className="!shadow-card" />
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
                       <p className="text-sm font-bold">{displayName}</p>
@@ -61,16 +62,16 @@ export default function MessagesPage() {
                         </Link>
                       ) : null}
                     </div>
-                    {inv.greetingText ? <p className="mt-1 text-xs leading-relaxed text-ink-sub">{inv.greetingText}</p> : null}
-                    <div className="mt-1.5 flex flex-wrap gap-1">
+                    {inv.greetingText ? <p className="mt-1 text-xs leading-5 text-ink-sub">{inv.greetingText}</p> : null}
+                    <div className="mt-2 flex flex-wrap gap-1.5">
                       {(snapshot?.interestTags ?? []).slice(0, 3).map((t) => (
-                        <Tag key={t} tone="mint">{t}</Tag>
+                        <Tag key={t} tone="mint" className="!text-[11px]">{t}</Tag>
                       ))}
                       {(snapshot?.socialIntents ?? []).slice(0, 2).map((s) => (
-                        <Tag key={s} tone="pink">{s}</Tag>
+                        <Tag key={s} tone="pink" className="!text-[11px]">{s}</Tag>
                       ))}
                     </div>
-                    <p className="mt-1.5 text-[11px] text-ink-sub/70">接受后才能开始自由聊天（DEC-003.5）</p>
+                    <p className="mt-2 rounded-full bg-bg px-2.5 py-1 text-[11px] text-ink-sub">接受后才能开始自由聊天（DEC-003.5）</p>
                   </div>
                 </div>
                 <Button
@@ -106,8 +107,9 @@ export default function MessagesPage() {
 
       {/* 我发出的邀请 */}
       <section className="mb-6">
-        <h2 className="mb-2.5 flex items-center gap-2 font-bold">
-          <Send size={15} className="text-primary" /> 我发出的邀请
+        <h2 className="mb-3 flex items-center gap-2 text-base font-bold">
+          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary-soft text-primary"><Send size={16} /></span>
+          我发出的邀请
           <Tag tone="neutral">{sent.length}</Tag>
         </h2>
         {sent.length === 0 ? (
@@ -146,8 +148,9 @@ export default function MessagesPage() {
 
       {/* 已有会话 */}
       <section>
-        <h2 className="mb-2.5 flex items-center gap-2 font-bold">
-          <CheckCircle2 size={16} className="text-mint" /> 已有会话
+        <h2 className="mb-3 flex items-center gap-2 text-base font-bold">
+          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-mint-soft text-[#218B70]"><CheckCircle2 size={16} /></span>
+          已有会话
         </h2>
         {myConversations.length === 0 ? (
           <Card>
@@ -161,11 +164,11 @@ export default function MessagesPage() {
               const last = c.demoMessages[c.demoMessages.length - 1]
               return (
                 <Link key={c.id} to={`/messages/${c.id}`}>
-                  <Card className="flex items-center gap-3 !py-3 transition-shadow hover:shadow-lg">
+                  <Card className="flex items-center gap-3 !py-3 transition-all hover:-translate-y-0.5 hover:shadow-card-hover">
                     {otherPortrait ? (
-                      <GradientAvatar seed={otherPortrait.id} text={otherPortrait.nickname} size="md" />
+                      <GradientAvatar seed={otherPortrait.id} text={otherPortrait.nickname} size="md" className="!shadow-card" />
                     ) : (
-                      <GradientAvatar seed={otherId ?? 'x'} text="同" size="md" />
+                      <GradientAvatar seed={otherId ?? 'x'} text="同" size="md" className="!shadow-card" />
                     )}
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-bold">{nameOf(otherId ?? '')}</p>
@@ -173,7 +176,7 @@ export default function MessagesPage() {
                         {last ? last.text : '会话已开启，打个招呼吧（演示样例，非实时传输）'}
                       </p>
                     </div>
-                    <span className="shrink-0 text-xs text-ink-sub/60">进入 →</span>
+                    <span className="shrink-0 text-xs font-medium text-primary">进入 →</span>
                   </Card>
                 </Link>
               )

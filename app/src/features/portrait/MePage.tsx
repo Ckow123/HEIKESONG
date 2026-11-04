@@ -57,18 +57,19 @@ export default function MePage() {
 
       {myPortrait ? (
         <Card className="relative mb-4 overflow-hidden !p-0">
-          <div className={`relative h-24 bg-gradient-to-br ${gradientFor(myPortrait.id)}`}>
-            <span className="absolute -left-6 -top-8 h-24 w-24 rounded-full bg-white/25 blur-2xl" />
-            <span className="absolute bottom-0 right-8 h-14 w-14 rounded-full bg-white/20 blur-xl" />
+          <div className={`relative h-28 bg-gradient-to-br ${gradientFor(myPortrait.id)}`}>
+            <span className="absolute -left-6 -top-10 h-28 w-28 rounded-full border-[14px] border-white/20" />
+            <span className="absolute bottom-0 right-10 h-16 w-16 rounded-full bg-white/15" />
+            <span className="absolute left-[26%] top-6 h-1.5 w-1.5 rounded-full bg-white/70" />
           </div>
           <div className="px-4 pb-4 md:px-5 md:pb-5">
-            <div className="-mt-10 flex items-end justify-between">
-              <GradientAvatar seed={myPortrait.id} text={myPortrait.nickname} size="xl" className="ring-4 ring-card" />
-              <Tag tone={myPortrait.isPublic ? 'mint' : 'neutral'}>{myPortrait.isPublic ? '已公开' : '未公开'}</Tag>
+            <div className="-mt-12 flex items-end justify-between gap-3">
+              <GradientAvatar seed={myPortrait.id} text={myPortrait.nickname} size="xl" className="!h-24 !w-24 !text-3xl !shadow-card ring-4 ring-card" />
+              <Tag tone={myPortrait.isPublic ? 'mint' : 'neutral'} className="mb-2">{myPortrait.isPublic ? '已公开' : '未公开'}</Tag>
             </div>
-            <h2 className="mt-3 text-lg font-bold">{myPortrait.nickname}</h2>
-            {myPortrait.bio ? <p className="mt-1.5 text-sm leading-relaxed text-ink-sub">{myPortrait.bio}</p> : null}
-            <div className="mt-3 flex flex-wrap gap-1.5">
+            <h2 className="mt-3 text-xl font-bold tracking-tight">{myPortrait.nickname}</h2>
+            {myPortrait.bio ? <p className="mt-1.5 text-sm leading-6 text-ink-sub">{myPortrait.bio}</p> : null}
+            <div className="mt-3 flex flex-wrap gap-2">
               {myPortrait.interestTags.map((t) => (
                 <Tag key={t} tone="mint">{t}</Tag>
               ))}
@@ -76,7 +77,7 @@ export default function MePage() {
                 <Tag key={s} tone="pink">{s}</Tag>
               ))}
             </div>
-            <p className="mt-3 text-[11px] leading-relaxed text-ink-sub">
+            <p className="mt-3 rounded-2xl bg-bg/70 px-3 py-2.5 text-[11px] leading-5 text-ink-sub">
               {myPortrait.isPublic
                 ? '当前状态：出现在公开找人列表与星云中，可以主动打招呼。'
                 : '当前状态：不出现在公开列表与星云，不能主动打招呼；仍可以凭基础 Portrait 向组织者展示并报名（DEC-002.4）。'}

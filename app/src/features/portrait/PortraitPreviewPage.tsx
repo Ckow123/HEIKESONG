@@ -28,28 +28,29 @@ export default function PortraitPreviewPage() {
       />
       {previewView && myPortrait ? (
         <Card className="relative mb-4 overflow-hidden !p-0">
-          <div className={`relative h-20 bg-gradient-to-br ${gradientFor(myPortrait.id)}`}>
-            <span className="absolute -left-4 -top-6 h-16 w-16 rounded-full bg-white/25 blur-xl" />
+          <div className={`relative h-24 bg-gradient-to-br ${gradientFor(myPortrait.id)}`}>
+            <span className="absolute -left-5 -top-8 h-24 w-24 rounded-full border-[12px] border-white/25" />
+            <span className="absolute -right-4 bottom-0 h-14 w-14 rounded-full bg-white/20" />
           </div>
           <div className="px-4 pb-4 md:px-5 md:pb-5">
-            <div className="-mt-8 flex items-end justify-between">
-              <GradientAvatar seed={myPortrait.id} text={previewView.nickname} size="lg" className="ring-4 ring-card" />
-              {previewView.mbti ? <Tag tone="primary">{previewView.mbti}</Tag> : null}
+            <div className="-mt-10 flex items-end justify-between gap-3">
+              <GradientAvatar seed={myPortrait.id} text={previewView.nickname} size="lg" className="!h-20 !w-20 !text-2xl !shadow-card ring-4 ring-card" />
+              {previewView.mbti ? <Tag tone="primary" className="mb-2">{previewView.mbti}</Tag> : null}
             </div>
-            <h2 className="mt-2.5 text-lg font-bold">{previewView.nickname}</h2>
-            {previewView.bio ? <p className="mt-1.5 text-sm leading-relaxed text-ink-sub">{previewView.bio}</p> : null}
+            <h2 className="mt-3 text-xl font-bold tracking-tight">{previewView.nickname}</h2>
+            {previewView.bio ? <p className="mt-1.5 text-sm leading-6 text-ink-sub">{previewView.bio}</p> : null}
             <div className="mt-2 flex flex-col gap-1 text-xs text-ink-sub">
               {previewView.zodiac ? <span>星座：{previewView.zodiac}（仅辅助表达）</span> : null}
               <span>关系状态：{previewView.relationshipStatus === 'in_relationship' ? '有对象（自愿展示，非认证）' : '不公开'}</span>
             </div>
             <h3 className="mb-2 mt-4 text-sm font-bold">兴趣爱好</h3>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-2">
               {previewView.interestTags.map((t) => (
                 <Tag key={t} tone="mint">{t}</Tag>
               ))}
             </div>
             <h3 className="mb-2 mt-4 text-sm font-bold">社交意图</h3>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-2">
               {previewView.socialIntents.map((s) => (
                 <Tag key={s} tone="pink">{s}</Tag>
               ))}

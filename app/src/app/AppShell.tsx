@@ -33,7 +33,7 @@ export function AppShell() {
           <span className="rounded-full bg-primary-soft px-1.5 py-0.5 text-[10px] font-medium text-primary">演示</span>
         </Link>
       </div>
-      <main className="mx-auto w-full max-w-md px-4 pb-24 pt-3 md:max-w-3xl md:pb-10 md:pt-6 lg:max-w-5xl">
+      <main className="mx-auto w-full max-w-md px-4 pb-28 pt-4 md:max-w-3xl md:pb-12 md:pt-7 lg:max-w-6xl lg:px-6">
         <Outlet />
       </main>
       <BottomNav />
